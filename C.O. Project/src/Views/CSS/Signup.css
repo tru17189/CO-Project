@@ -1,0 +1,30 @@
+* {
+    background-color: white;
+}
+
+.backdrop {
+    min-height: 100vh;
+    background: var(--primary-purple);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card {
+    background: var(--white);
+    border: 2.5px solid #3BBFFF;
+    border-radius: 4px;
+    padding: 40px 36px 36px;
+    width: 100%;
+    max-width: 420px;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.card > h1 {
+    text-align: center;
+    font-weight: 400;
+    font-size: 28px;
+    margin: 0 0 6px;
+    color: var(--text-dark);
+}

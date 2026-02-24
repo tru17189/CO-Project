@@ -1,0 +1,52 @@
+.field-group {
+    margin-bottom: 16px;
+}
+
+.label {
+    display: block;
+    font-size: 14px;
+    color: #aaa;
+    margin-bottom: 6px;
+}
+
+.input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+    outline: none;
+    box-sizing: border-box;
+    color: var(--text-dark);
+}
+
+.next-button {
+    width: 100%;
+    padding: 13px;
+    background: var(--primary-purple);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 4px 0 24px;
+}
+
+.divider-line {
+    flex: 1;
+    height: 1px;
+    background: #ccc;
+    display: block;
+}
+
+.divider-text {
+    color: #999;
+    font-size: 14px;
+}

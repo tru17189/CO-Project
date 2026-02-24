@@ -1,0 +1,49 @@
+* {
+    background-color: white;
+}
+
+.backdrop {
+    min-height: 100vh;
+    background: var(--primary-purple);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card {
+    background: var(--white);
+    border: 2.5px solid #3BBFFF;
+    border-radius: 4px;
+    padding: 40px 36px 36px;
+    width: 100%;
+    max-width: 420px;
+    box-sizing: border-box;
+}
+
+.card > h1 {
+    text-align: center;
+    font-weight: 400;
+    font-size: 28px;
+    margin: 0 0 6px;
+    color: var(--text-dark);
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: var(--gray);
+    margin: 0 0 28px;
+}
+
+.subtitle > a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+.forgot-link {
+    display: block;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--link-color);
+    text-decoration: none;
+}
