@@ -1,0 +1,64 @@
+.welcome-backdrop {
+    min-height: 100vh;
+    background-color: var(--primary-purple);
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 2.5rem;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.shadowed-title {
+    color: white;
+    background-color: transparent;
+    text-shadow: 2px 3px 6px rgba(0, 0, 0, 0.4);
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    line-height: 1.3;
+}
+
+.more-instructions {
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    margin-top: 1.5rem;
+    gap: 0.5rem;
+}
+
+.instruction-container {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+    background-color: transparent;
+    color: white;
+    font-size: 17px;
+    line-height: 1.6;
+    padding: 8px 12px;
+}
+
+.instruction-container.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.instruction-container p,
+.instruction-container ul,
+.instruction-container li {
+    background-color: transparent;
+    color: white;
+    margin: 0;
+}
+
+.instruction-container ul {
+    padding-left: 1.4rem;
+}
+
+.instruction-container li {
+    margin-bottom: 4px;
+}
+
+.instruction-container strong {
+    background-color: transparent;
+    color: white;
+}

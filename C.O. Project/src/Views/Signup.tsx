@@ -3,6 +3,10 @@ import GoogleButton from "../Components/GoogleButton";
 import Divider from '../Components/Divider';
 import BasicInput from '../Components/BasicInput';
 import { useState } from 'react';
+import BirthdayInput from '../Components/BirthdayInput';
+import GenderInput from '../Components/GenderInput';
+import TermsAndConditions from '../Components/TermsAndConditions';
+import NextButton from '../Components/NextButton';
 
 export default function Signup() {
     // Variables para los inputs
@@ -14,6 +18,10 @@ export default function Signup() {
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
+    const [birthDay, setBirthDay] = useState("")
+    const [birthMonth, setBirthMonth] = useState("")
+    const [birthYear, setBirthYear] = useState("")
+    const [gender, setGender] = useState("")
 
     return (
         <div className="backdrop">
@@ -69,6 +77,21 @@ export default function Signup() {
                     value={phoneNumber}
                     type='phoneNumber'
                     onChange={(e) => setPhoneNumber(e.target.value)}
+                />}
+                {<BirthdayInput 
+                    dayValue={birthDay}
+                    onChangeDay={setBirthDay}
+                    yearValue={birthYear}
+                    onChangeYear={setBirthYear}
+                />}
+                {<GenderInput 
+                    value={gender}
+                    onChange={setGender}
+                />}
+                {<TermsAndConditions />}
+                {<NextButton 
+                    text="Crear Cuenta"
+                    isWhiteStyle={false}
                 />}
             </div>
         </div>

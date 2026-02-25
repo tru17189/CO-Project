@@ -40,6 +40,7 @@ export default function Login() {
                 </a>
                 {<NextButton
                     text="Iniciar Sesión"
+                    isWhiteStyle={false}
                 />}
             </div>
         </div>

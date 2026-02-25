@@ -1,3 +1,4 @@
+/*BASIC INPUT*/
 .field-group {
     margin-bottom: 16px;
 }
@@ -5,7 +6,7 @@
 .label {
     display: block;
     font-size: 14px;
-    color: #aaa;
+    color: var(--text-dark);
     margin-bottom: 6px;
 }
 
@@ -23,15 +24,14 @@
 .next-button {
     width: 100%;
     padding: 13px;
-    background: var(--primary-purple);
-    color: #fff;
     border: none;
     border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
-    margin-top: 8px;
+    margin-top: 25px;
 }
 
+/*DIVIDER INPUT*/
 .divider {
     display: flex;
     align-items: center;
@@ -47,6 +47,129 @@
 }
 
 .divider-text {
-    color: #999;
+    color: var(--gray);
     font-size: 14px;
+}
+
+/*BIRTHDAY INPUT*/
+.birthday-field-group {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: row;
+}
+
+.birtday-input {
+    width: 25%;
+    padding: 10px 14px;
+    border: 1.5px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+    outline: none;
+    box-sizing: border-box;
+    color: var(--text-dark);
+}
+
+.birthday-select {
+    width: 85%;
+    padding: 10px 14px;
+    border: 1.5px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+    box-sizing: border-box;
+    color: var(--text-dark);
+    margin: 10px;
+    font-size: 15px;
+}
+
+/*GENDER INPUT*/
+.gender-wrapper {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.gender-label {
+    font-size: 14px;
+    color: var(--text-dark);
+    margin-left: 2px;
+}
+
+.gender-options-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.gender-optionbtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.gender-radio {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.15s;
+}
+
+.gender-radioDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--primary-purple);
+}
+
+.gender-optionLbael {
+    font-size: 14px;
+    color: var(--text-dark);
+}
+
+/*GENDER INPUT*/
+.terms-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    text-align: left;
+    max-width: 280px;
+    margin-top: 10px;
+}
+
+.terms-checkbox {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    border-radius: 3px;
+    border: 1.5px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.terms-text {
+    font-size: 13px;
+    color: var(--text-dark);
+    line-height: 1.5;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.terms-company {
+    color: var(--text-dark);
+    font-weight: 400;
 }
