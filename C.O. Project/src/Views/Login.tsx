@@ -12,8 +12,8 @@ export default function Login() {
     const [password, setPassword] = useState("");
 
     return (
-        <div className='backdrop'>
-            <div className='card'>
+        <div className='login-wrapper'>
+            <div className='login-card'>
                 <h1>Log In</h1>
                 <p className='subtitle'>
                     ¿No tienes una cuenta?{" "}
@@ -40,7 +40,6 @@ export default function Login() {
                 </a>
                 {<NextButton
                     text="Iniciar Sesión"
-                    isWhiteStyle={false}
                 />}
             </div>
         </div>

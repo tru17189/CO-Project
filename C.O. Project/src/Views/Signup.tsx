@@ -91,7 +91,6 @@ export default function Signup() {
                 {<TermsAndConditions />}
                 {<NextButton 
                     text="Crear Cuenta"
-                    isWhiteStyle={false}
                 />}
             </div>
         </div>

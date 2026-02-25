@@ -1,0 +1,114 @@
+.backdrop {
+    min-height: 100vh;
+    background: linear-gradient(160deg, var(--primary-purple) 0%, var(--primary-purple) 45%, var(--secondary-purple) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
+    box-sizing: border-box;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+/* Background orbs for depth */
+.backdrop::before {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--primary-purple) 0%, transparent 70%);
+    top: -150px;
+    right: -150px;
+    pointer-events: none;
+}
+.backdrop::after {
+    content: '';
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(196, 168, 232, 0.12) 0%, transparent 70%);
+    bottom: -100px;
+    left: -100px;
+    pointer-events: none;
+}
+
+/* ── Header ── */
+.header {
+    text-align: center;
+    margin-bottom: 48px;
+    position: relative;
+    z-index: 1;
+}
+.titleEyebrow {
+    color: rgba(220, 200, 255, 0.65);
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-family: 'Trebuchet MS', sans-serif;
+    margin: 0 0 16px;
+}
+.title {
+    color: #fff;
+    font-size: clamp(28px, 4vw, 46px);
+    font-weight: 800;
+    margin: 0 0 10px;
+    letter-spacing: -0.5px;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+    font-family: Georgia, serif;
+    line-height: 1.15;
+}
+.subtitle {
+    color: rgba(220, 200, 255, 0.8);
+    font-size: clamp(14px, 2vw, 18px);
+    font-family: 'Trebuchet MS', sans-serif;
+    margin: 0;
+    font-weight: 400;
+}
+
+.clickHint {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 18px;
+    color: var(--secondary-purple);
+    font-size: 13px;
+    font-family: 'Trebuchet MS', sans-serif;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(196, 168, 232, 0.25);
+    border-radius: 20px;
+    padding: 6px 14px;
+}
+.clickDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--secondary-purple);
+    animation: pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); }
+}
+
+/* ── Instructions ── */
+.instructions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 680px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ── Footer button ── */
+.footer {
+    margin-top: 52px;
+    position: relative;
+    z-index: 1;
+}
