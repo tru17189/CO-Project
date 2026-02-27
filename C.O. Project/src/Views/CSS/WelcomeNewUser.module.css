@@ -41,6 +41,7 @@
     margin-bottom: 48px;
     position: relative;
     z-index: 1;
+    margin-top: 5rem;
 }
 .titleEyebrow {
     color: rgba(220, 200, 255, 0.65);
@@ -111,4 +112,19 @@
     margin-top: 52px;
     position: relative;
     z-index: 1;
+}
+.nextButton {
+    color: var(--white);
+    background-color: var(--primary-purple);
+    border: 3px solid var(--primary-purple);
+    width: 25rem;
+    height: 3rem;
+    border-radius: 8px;
+    font-family: 'Trebuchet MS', sans-serif;
+    font-size: 20px;
+}
+.nextButton:active{
+    color: var(--primary-purple);
+    background-color: var(--white);
+    border: 3px solid var(--primary-purple);
 }

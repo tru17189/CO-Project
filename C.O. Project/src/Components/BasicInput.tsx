@@ -1,7 +1,13 @@
 import './styles/Components.css'
 
-export default function BasicInput({label, value, type, onChange}:{label:string, value:string, 
-    type:string, onChange:(e: any) => void}) {
+interface basicInputProps {
+    label: string,
+    value: string | number | undefined,
+    type: string,
+    onChange: (e: any) => void
+}
+
+export default function BasicInput({label, value, type, onChange}:basicInputProps) {
     
     return (
         <div className='field-group'>

@@ -1,18 +1,26 @@
-import { useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import NewInstruction from '../Components/NewInstruction'
-import NextButton from '../Components/NextButton'
 import styles from './CSS/WelcomeNewUser.module.css'
+import type { RefObject } from 'react'
 
 export default function WelcomeNewUser() {
     const [numberOfCLicks, setNumberOfClicks] = useState(0)
-
+    const instReference = Array.from({length:5}, () => useRef<HTMLDivElement>(null))
+    
+    function useAutoScroll(refs: RefObject<HTMLDivElement | null>[], trigger: number) {
+        useEffect(() => {
+            refs.forEach(ref => {
+                ref.current?.scrollIntoView({behavior: 'smooth'})
+            })
+        }, [trigger, refs])
+    }
+    useAutoScroll(instReference, numberOfCLicks)
     function clicksCounter() {
         setNumberOfClicks(prev => prev + 1)
     }
 
     return (
         <div className={styles.backdrop} onClick={clicksCounter}>
-
             {/* Header */}
             <header className={styles.header}>
                 <p className={styles.titleEyebrow}>Plataforma de agentes IA</p>
@@ -28,7 +36,7 @@ export default function WelcomeNewUser() {
 
             {/* Instructions */}
             <div className={styles.instructions}>
-                <NewInstruction
+                {numberOfCLicks>=1 && <NewInstruction
                     text={
                         <p>
                             ¿Te imaginas sumar trabajadores incansables, súper eficientes y siempre
@@ -37,8 +45,9 @@ export default function WelcomeNewUser() {
                     }
                     insOrder={1}
                     numberOfCLicks={numberOfCLicks}
-                />
-                <NewInstruction
+                    ref={instReference[0]}
+                />}
+                {numberOfCLicks>=2 && <NewInstruction
                     text={
                         <p>
                             En esta primera versión, su objetivo principal es{' '}
@@ -48,8 +57,9 @@ export default function WelcomeNewUser() {
                     }
                     insOrder={2}
                     numberOfCLicks={numberOfCLicks}
-                />
-                <NewInstruction
+                    ref={instReference[1]}
+                />}
+                {numberOfCLicks>=3 && <NewInstruction
                     text={
                         <ul>
                             <li><strong>Agentes informativos:</strong> promociones y novedades.</li>
@@ -59,8 +69,9 @@ export default function WelcomeNewUser() {
                     }
                     insOrder={3}
                     numberOfCLicks={numberOfCLicks}
-                />
-                <NewInstruction
+                    ref={instReference[2]}
+                />}
+                {numberOfCLicks>=4 && <NewInstruction
                     text={
                         <p>
                             <strong>Integra ONA a tu operación.</strong>
@@ -69,14 +80,16 @@ export default function WelcomeNewUser() {
                     }
                     insOrder={4}
                     numberOfCLicks={numberOfCLicks}
-                />
+                    ref={instReference[3]}
+                />}
             </div>
-
             {/* Footer */}
-            <div className={styles.footer}>
-                <NextButton text="Continuar" />
-            </div>
-
+            {numberOfCLicks>=5 && <div 
+                className={styles.footer}
+                style={5>=numberOfCLicks ? {visibility:'visible'} : {visibility:'hidden'}}
+                ref={instReference[4]}>
+                <button className={styles.nextButton}>Continuar...</button>
+            </div>}
         </div>
     )
 }
