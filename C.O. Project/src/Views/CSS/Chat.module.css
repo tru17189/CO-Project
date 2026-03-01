@@ -1,20 +1,20 @@
 .chatApp {
-    --sidebar-bg: #111b21;
-    --sidebar-header-bg: #202c33;
-    --sidebar-hover: #2a3942;
-    --sidebar-active: #2a3942;
-    --chat-bg: #0b141a;
+    --sidebar-bg: white;
+    --sidebar-header-bg: white;
+    --sidebar-hover: var(--gray);
+    --sidebar-active: var(--gray);
+    --chat-bg: lightgray;
     --chat-pattern: rgba(255,255,255,0.03);
-    --bubble-out: #005c4b;
-    --bubble-in: #202c33;
-    --accent: #00a884;
-    --accent-light: #00cf9d;
-    --text-primary: #e9edef;
-    --text-secondary: #8696a0;
-    --text-muted: #667781;
+    --bubble-out: var(--primary-purple);
+    --bubble-in: white;
+    --accent: var(--border-color);
+    --accent-light: var(--border-color);
+    --text-primary: black;
+    --text-secondary: lightgray;
+    --text-muted: darkgray;
     --input-bg: #2a3942;
     --divider: #222d34;
-    --header-bg: #202c33;
+    --header-bg: var(--gray);
 
     display: flex;
     height: 100vh;
@@ -90,7 +90,7 @@
 .searchInput {
     width: 100%;
     background: var(--sidebar-header-bg);
-    border: none;
+    border: 2px solid var(--sidebar-active);
     border-radius: 8px;
     padding: 9px 16px 9px 40px;
     color: var(--text-primary);
@@ -295,7 +295,7 @@
     margin: 12px 0;
 }.dateDividerLabel {
     background: var(--sidebar-header-bg);
-    color: var(--text-secondary);
+    color: var(--text-primary);
     font-size: 12px;
     padding: 5px 12px;
     border-radius: 8px;

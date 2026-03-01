@@ -1,4 +1,5 @@
 import Chat from './Views/Chat'
+import Dashboard from './Views/Dashboard'
 import ForgotMyPassword from './Views/ForgotMyPassword'
 import Login from './Views/Login'
 import NewPassword from './Views/NewPassword'
@@ -10,7 +11,7 @@ function App() {
 
   return (
     <>
-      <Chat />
+      <Dashboard />
     </>
   )
 }

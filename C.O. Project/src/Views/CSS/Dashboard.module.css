@@ -1,0 +1,583 @@
+/* ── CSS Variables ── */
+.app {
+    --primary: #7865a3;
+    --primary-dark: #5a4a82;
+    --primary-light: #9880be;
+    --secondary: #c1a3cd;
+    --secondary-light: #dcc6e4;
+    --accent: #e3d814;
+    --accent-dark: #c4bc0d;
+    --bg: #f4f1f9;
+    --surface: #ffffff;
+    --surface-2: #faf8fd;
+    --text-primary: #1e1433;
+    --text-secondary: #6b5f80;
+    --text-muted: #a897bb;
+    --border: #e8e0f0;
+    --sidebar-width: 240px;
+    --sidebar-collapsed: 64px;
+    --header-height: 64px;
+    --shadow-sm: 0 1px 4px rgba(120, 101, 163, 0.1);
+    --shadow-md: 0 4px 16px rgba(120, 101, 163, 0.15);
+    --shadow-lg: 0 8px 32px rgba(120, 101, 163, 0.2);
+    --radius: 12px;
+    --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    background: var(--bg);
+    font-family: 'Georgia', serif;
+    overflow: hidden;
+    color: var(--text-primary);
+}
+
+/* ════════════════════════
+   SIDEBAR
+════════════════════════ */
+
+.sidebar {
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--primary);
+    display: flex;
+    flex-direction: column;
+    transition: width var(--transition), min-width var(--transition);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
+}
+
+.sidebarCollapsed {
+    width: var(--sidebar-collapsed);
+    min-width: var(--sidebar-collapsed);
+}
+
+.sidebarBrand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 16px;
+    height: var(--header-height);
+    box-sizing: border-box;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    flex-shrink: 0;
+}
+
+.brandLogo {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--primary-dark);
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(227, 216, 20, 0.4);
+}
+
+.brandName {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+    transition: opacity var(--transition);
+}
+
+.sidebarCollapsed .brandName {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Nav */
+.sidebarNav {
+    flex: 1;
+    padding: 16px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow: hidden;
+}
+
+.navItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 12px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    transition: background var(--transition), color var(--transition);
+    white-space: nowrap;
+    font-family: 'Trebuchet MS', sans-serif;
+    font-size: 14px;
+}
+
+.navItem:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+.navItemActive {
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+    font-weight: 600;
+}
+
+.navItemActive::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 3px;
+    height: 32px;
+    background: var(--accent);
+    border-radius: 0 4px 4px 0;
+}
+
+.navItem {
+    position: relative;
+}
+
+.navIcon {
+    font-size: 18px;
+    flex-shrink: 0;
+    width: 24px;
+    text-align: center;
+}
+
+.navLabel {
+    transition: opacity var(--transition);
+}
+
+.sidebarCollapsed .navLabel {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Toggle button */
+.toggleBtn {
+    margin: 12px 8px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.8);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 14px;
+    transition: background var(--transition), color var(--transition);
+    white-space: nowrap;
+    font-family: 'Trebuchet MS', sans-serif;
+    flex-shrink: 0;
+}
+
+.toggleBtn:hover {
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+}
+
+.toggleIcon {
+    font-size: 16px;
+    flex-shrink: 0;
+    transition: transform var(--transition);
+}
+
+.sidebarCollapsed .toggleIcon {
+    transform: rotate(180deg);
+}
+
+.toggleLabel {
+    transition: opacity var(--transition);
+}
+
+.sidebarCollapsed .toggleLabel {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ════════════════════════
+   MAIN CONTENT
+════════════════════════ */
+
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 0;
+}
+
+/* Top bar */
+.topbar {
+    height: var(--header-height);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.topbarLeft h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.topbarLeft p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0;
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
+.topbarRight {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.searchBox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+}
+
+.searchBox input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 14px;
+    color: var(--text-primary);
+    width: 200px;
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
+.searchBox input::placeholder {
+    color: var(--text-muted);
+}
+
+.searchIcon {
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.userChip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px 6px 6px;
+    border-radius: 20px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    cursor: pointer;
+}
+
+.userChipAvatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.userChipName {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
+/* ── Stats row ── */
+.statsRow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding: 20px 28px 0;
+    flex-shrink: 0;
+}
+
+.statCard {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.statCard:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.statIcon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.statInfo p {
+    margin: 0;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: 'Trebuchet MS', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.statInfo h3 {
+    margin: 2px 0 0;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+/* ── Contacts table ── */
+.tableSection {
+    flex: 1;
+    padding: 20px 28px 28px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.tableHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.tableTitle {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.tableSubtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 2px 0 0;
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
+.addBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    border-radius: 8px;
+    border: none;
+    background: var(--primary);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Trebuchet MS', sans-serif;
+    transition: background var(--transition), transform var(--transition);
+}
+
+.addBtn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+}
+
+.tableWrapper {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: auto;
+    box-shadow: var(--shadow-sm);
+    flex: 1;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+thead th {
+    background: var(--surface-2);
+    padding: 13px 16px;
+    text-align: left;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'Trebuchet MS', sans-serif;
+    white-space: nowrap;
+}
+
+tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background var(--transition);
+}
+
+tbody tr:last-child {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background: var(--surface-2);
+}
+
+tbody td {
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--text-primary);
+    vertical-align: middle;
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
+/* Contact cell */
+.contactCell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.contactAvatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.contactName {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+/* Platform badge */
+.platformBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Agent dropdown */
+.agentSelect {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text-secondary);
+    font-size: 13px;
+    cursor: pointer;
+    outline: none;
+    font-family: 'Trebuchet MS', sans-serif;
+    transition: border-color var(--transition);
+}
+
+.agentSelect:focus {
+    border-color: var(--primary);
+}
+
+/* Action buttons */
+.chatBtn {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all var(--transition);
+}
+
+.chatBtn:hover {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+    transform: scale(1.08);
+}
+
+.reportBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--secondary);
+    background: transparent;
+    color: var(--primary);
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Trebuchet MS', sans-serif;
+    transition: all var(--transition);
+    white-space: nowrap;
+}
+
+.reportBtn:hover {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+/* Phone */
+.phoneText {
+    color: var(--text-secondary);
+    font-size: 13.5px;
+}
