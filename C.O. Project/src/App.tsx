@@ -1,3 +1,4 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Chat from './Views/Chat'
 import Dashboard from './Views/Dashboard'
 import ForgotMyPassword from './Views/ForgotMyPassword'
@@ -11,7 +12,18 @@ function App() {
 
   return (
     <>
-      <Dashboard />
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Login />} />
+          <Route path='/signup' element={<Signup />} />
+          <Route path='/forgot-password' element={<ForgotMyPassword />} />
+          <Route path='/new-password' element={<NewPassword />} />
+          <Route path='/welcome-new-user' element={<WelcomeNewUser />} />
+          <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='/chat' element={<Chat />} />
+          <Route path='/users-tiers' element={<UsersTiers />} />
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }
