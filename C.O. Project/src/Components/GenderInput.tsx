@@ -10,7 +10,7 @@ interface GenderInputProps {
 }
 
 export default function GenderInput({ value, onChange }: GenderInputProps) {
-    const [selected, setSelected] = useState<GenderOption | null>(value ?? null);
+    const [selected, setSelected] = useState<string | null>(value ?? null);
     const handleSelect = (option: GenderOption) => {
         setSelected(option);
         onChange?.(option);

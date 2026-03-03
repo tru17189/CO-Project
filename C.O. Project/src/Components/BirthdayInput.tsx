@@ -1,15 +1,16 @@
 import './styles/Components.css'
 
-export default function BirthdayInput({dayValue, onChangeDay, yearValue, onChangeYear}:{
+export default function BirthdayInput({dayValue, onChangeDay, yearValue, onChangeYear,
+    monthValue, onChangeMonth}:{
     dayValue:string, onChangeDay:(e: any) => void, yearValue:string, 
-    onChangeYear:(e: any) => void}) {
+    onChangeYear:(e: any) => void, monthValue:string, onChangeMonth:(e: any) => void}) {
     
     return (
         <div className='field-group'>
             <label className='label'>Fecha de Nacimiento</label>
             <div className='birthday-field-group'>
                 <input
-                    type="day"
+                    type="input"
                     value={dayValue}
                     onChange={onChangeDay}
                     className='birtday-input'
@@ -17,7 +18,9 @@ export default function BirthdayInput({dayValue, onChangeDay, yearValue, onChang
                 />
                 <section>
                     <select id="form-birthday-month" className='birthday-select'
-                    name='form-birthday-month' defaultValue="" required>
+                    name='form-birthday-month' defaultValue="" 
+                    value={monthValue} onChange={onChangeMonth}
+                    required>
                         <option value="Enero">Enero</option>
                         <option value="Febrero">Febrero</option>
                         <option value="Marzo">Marzo</option>
@@ -33,7 +36,7 @@ export default function BirthdayInput({dayValue, onChangeDay, yearValue, onChang
                     </select>
                 </section>
                 <input
-                    type="year"
+                    type="input"
                     value={yearValue}
                     onChange={onChangeYear}
                     className='birtday-input'

@@ -2,11 +2,12 @@ import './CSS/Signup.css'
 import GoogleButton from "../Components/GoogleButton";
 import Divider from '../Components/Divider';
 import BasicInput from '../Components/BasicInput';
-import { useState } from 'react';
+import { use, useState } from 'react';
 import BirthdayInput from '../Components/BirthdayInput';
 import GenderInput from '../Components/GenderInput';
 import TermsAndConditions from '../Components/TermsAndConditions';
 import NextButton from '../Components/NextButton';
+import { useNavigate } from 'react-router-dom';
 
 export default function Signup() {
     // Variables para los inputs
@@ -22,6 +23,26 @@ export default function Signup() {
     const [birthMonth, setBirthMonth] = useState("")
     const [birthYear, setBirthYear] = useState("")
     const [gender, setGender] = useState("")
+
+    const navigate = useNavigate();
+
+    // ── Functions ──────────────────────────────────────────────
+    const validateInputs = () => {
+        event?.preventDefault();
+        console.log("First Name: ", firstName); 
+        console.log("Middle Name: ", middleName);
+        console.log("Apellidos: ", apellidos);
+        console.log("Phone number: ", phoneNumber);
+        console.log("Birthday: ", `${birthMonth}/${birthDay}/${birthYear}`)
+        console.log("Gender: ", gender);
+        console.log("Email: ", email);
+        console.log("Confirm Email: ", confirmEmail);
+        email === confirmEmail ? console.log("Emails match") : console.log("Emails do not match");
+        console.log("Password: ", password);
+        console.log("Confirm Password: ", password);
+        password === confirmPassword ? console.log("Passwords match") : console.log("Passwords do not match");
+        navigate('/welcome-new-user');
+    }
 
     return (
         <div className="backdrop">
@@ -69,7 +90,7 @@ export default function Signup() {
                 {<BasicInput 
                     label='Confirmar Contraseña'
                     value={confirmPassword}
-                    type='confirmPassword'
+                    type='password'
                     onChange={(e) => setConfirmPassword(e.target.value)}
                 />}
                 {<BasicInput 
@@ -80,17 +101,20 @@ export default function Signup() {
                 />}
                 {<BirthdayInput 
                     dayValue={birthDay}
-                    onChangeDay={setBirthDay}
+                    onChangeDay={(e) => setBirthDay(e.target.value)}
                     yearValue={birthYear}
-                    onChangeYear={setBirthYear}
+                    onChangeYear={(e) => setBirthYear(e.target.value)}
+                    monthValue={birthMonth}
+                    onChangeMonth={(e) => setBirthMonth(e.target.value)}
                 />}
                 {<GenderInput 
                     value={gender}
-                    onChange={setGender}
+                    onChange={(value) => setGender(value)}
                 />}
                 {<TermsAndConditions />}
                 {<NextButton 
                     text="Crear Cuenta"
+                    onClick={validateInputs}
                 />}
             </div>
         </div>
