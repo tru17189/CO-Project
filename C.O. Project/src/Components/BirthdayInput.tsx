@@ -15,6 +15,7 @@ export default function BirthdayInput({dayValue, onChangeDay, yearValue, onChang
                     onChange={onChangeDay}
                     className='birtday-input'
                     placeholder='Día'
+                    required
                 />
                 <section>
                     <select id="form-birthday-month" className='birthday-select'
@@ -41,6 +42,7 @@ export default function BirthdayInput({dayValue, onChangeDay, yearValue, onChang
                     onChange={onChangeYear}
                     className='birtday-input'
                     placeholder='Año'
+                    required
                 />
             </div>
         </div>

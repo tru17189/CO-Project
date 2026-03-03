@@ -2,7 +2,7 @@ import './CSS/Signup.css'
 import GoogleButton from "../Components/GoogleButton";
 import Divider from '../Components/Divider';
 import BasicInput from '../Components/BasicInput';
-import { use, useState } from 'react';
+import React, { useState } from 'react';
 import BirthdayInput from '../Components/BirthdayInput';
 import GenderInput from '../Components/GenderInput';
 import TermsAndConditions from '../Components/TermsAndConditions';
@@ -23,12 +23,30 @@ export default function Signup() {
     const [birthMonth, setBirthMonth] = useState("")
     const [birthYear, setBirthYear] = useState("")
     const [gender, setGender] = useState("")
+    const [error, setError] = useState("");
 
     const navigate = useNavigate();
 
     // ── Functions ──────────────────────────────────────────────
-    const validateInputs = () => {
-        event?.preventDefault();
+    const validateInputs = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (!e.currentTarget.checkValidity()) {
+            setError("Please fill out all required fields");
+            alert("Please fill out all required fields");
+            return;
+        }
+        if (email !== confirmEmail) {
+            setError("Emails do not match");
+            alert("Emails do not match");
+            return;
+        }
+        if (password !== confirmPassword) {
+            setError("Passwords do not match");
+            alert("Passwords do not match");
+            return;
+        }
+
+        // consoles
         console.log("First Name: ", firstName); 
         console.log("Middle Name: ", middleName);
         console.log("Apellidos: ", apellidos);
@@ -37,10 +55,8 @@ export default function Signup() {
         console.log("Gender: ", gender);
         console.log("Email: ", email);
         console.log("Confirm Email: ", confirmEmail);
-        email === confirmEmail ? console.log("Emails match") : console.log("Emails do not match");
         console.log("Password: ", password);
-        console.log("Confirm Password: ", password);
-        password === confirmPassword ? console.log("Passwords match") : console.log("Passwords do not match");
+        console.log("Confirm Password: ", confirmPassword);
         navigate('/welcome-new-user');
     }
 
@@ -51,71 +67,73 @@ export default function Signup() {
                 {<GoogleButton />}
                 {<Divider />}
                 {/*Comienzo de las preguntas */}
-                {<BasicInput 
-                    label="Primer Nombre" 
-                    value={firstName} 
-                    type="firstName" 
-                    onChange={(e) => setFirstName(e.target.value)}
-                />}
-                {<BasicInput 
-                    label='Segundo Nombre'
-                    value={middleName}
-                    type='middleName'
-                    onChange={(e) => setMiddleName(e.target.value)}
-                />}
-                {<BasicInput 
-                    label='Apellidos'
-                    value={apellidos}
-                    type='apellidos'
-                    onChange={(e) => setApellidos(e.target.value)}
-                />}
-                {<BasicInput 
-                    label='Correo Electrónico'
-                    value={email}
-                    type='email'
-                    onChange={(e) => setEmail(e.target.value)}
-                />}
-                {<BasicInput 
-                    label='Confirmar Correo Electrónico'
-                    value={confirmEmail}
-                    type='confirmEmail'
-                    onChange={(e) => setConfirmEmail(e.target.value)}
-                />}
-                {<BasicInput 
-                    label='Contraseña'
-                    value={password}
-                    type='password'
-                    onChange={(e) => setPassword(e.target.value)}
-                />}
-                {<BasicInput 
-                    label='Confirmar Contraseña'
-                    value={confirmPassword}
-                    type='password'
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                />}
-                {<BasicInput 
-                    label='Número de Telefono'
-                    value={phoneNumber}
-                    type='phoneNumber'
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                />}
-                {<BirthdayInput 
-                    dayValue={birthDay}
-                    onChangeDay={(e) => setBirthDay(e.target.value)}
-                    yearValue={birthYear}
-                    onChangeYear={(e) => setBirthYear(e.target.value)}
-                    monthValue={birthMonth}
-                    onChangeMonth={(e) => setBirthMonth(e.target.value)}
-                />}
-                {<GenderInput 
-                    value={gender}
-                    onChange={(value) => setGender(value)}
-                />}
-                {<TermsAndConditions />}
-                {<NextButton 
-                    text="Crear Cuenta"
-                    onClick={validateInputs}
-                />}
+                <form onSubmit={validateInputs}>
+                    {<BasicInput 
+                        label="Primer Nombre" 
+                        value={firstName} 
+                        type="text" 
+                        onChange={(e) => setFirstName(e.target.value)}
+                    />}
+                    {<BasicInput 
+                        label='Segundo Nombre'
+                        value={middleName}
+                        type='text'
+                        onChange={(e) => setMiddleName(e.target.value)}
+                    />}
+                    {<BasicInput 
+                        label='Apellidos'
+                        value={apellidos}
+                        type='text'
+                        onChange={(e) => setApellidos(e.target.value)}
+                    />}
+                    {<BasicInput 
+                        label='Correo Electrónico'
+                        value={email}
+                        type='email'
+                        onChange={(e) => setEmail(e.target.value)}
+                    />}
+                    {<BasicInput 
+                        label='Número de Telefono'
+                        value={phoneNumber}
+                        type='tel'
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                    />}
+                    {<BasicInput 
+                        label='Confirmar Correo Electrónico'
+                        value={confirmEmail}
+                        type='email'
+                        onChange={(e) => setConfirmEmail(e.target.value)}
+                    />}
+                    {<BasicInput 
+                        label='Contraseña'
+                        value={password}
+                        type='password'
+                        onChange={(e) => setPassword(e.target.value)}
+                    />}
+                    {<BasicInput 
+                        label='Confirmar Contraseña'
+                        value={confirmPassword}
+                        type='password'
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                    />}
+                    {<BirthdayInput 
+                        dayValue={birthDay}
+                        onChangeDay={(e) => setBirthDay(e.target.value)}
+                        yearValue={birthYear}
+                        onChangeYear={(e) => setBirthYear(e.target.value)}
+                        monthValue={birthMonth}
+                        onChangeMonth={(e) => setBirthMonth(e.target.value)}
+                    />}
+                    {<GenderInput 
+                        value={gender}
+                        onChange={(value) => setGender(value)}
+                    />}
+                    {<TermsAndConditions />}
+                    {<NextButton 
+                        text="Crear Cuenta"
+                        type='submit'
+                    />}
+                </form>
             </div>
         </div>
     )

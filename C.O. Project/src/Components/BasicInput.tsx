@@ -17,6 +17,7 @@ export default function BasicInput({label, value, type, onChange}:basicInputProp
                 value={value}
                 onChange={onChange}
                 className='input'
+                required
             />
         </div>
     )

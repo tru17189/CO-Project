@@ -13,8 +13,12 @@ export default function Login() {
     const navigate = useNavigate();
 
     // ── Functions ──────────────────────────────────────────────
-    const validateInputs = () => {
-        event?.preventDefault(); 
+    const validateInputs = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault(); 
+        if (!e.currentTarget.checkValidity()) {
+            alert("Please fill out all required fields");
+            return;
+        }
         console.log("Email:", email);
         console.log("password:", password);
         // Validacion correcta
@@ -51,7 +55,7 @@ export default function Login() {
                     </a>
                     {<NextButton
                         text="Iniciar Sesión"
-                        onClick={validateInputs}
+                        type='submit'
                     />}
                 </form>
             </div>

@@ -2,15 +2,16 @@ import './styles/Components.css'
 
 interface NextButtonType {
     text: string,
-    onClick: () => void
+    type: "submit" | "reset" | "button"
 }
 
-export default function NextButton({text, onClick}:NextButtonType) {
+export default function NextButton({text, type}:NextButtonType) {
     return (
         <>
             <button 
                 className='next-button'
-                onClick={onClick}>{text}</button>
+                type={type}
+            >{text}</button>
         </>
     )
 }
