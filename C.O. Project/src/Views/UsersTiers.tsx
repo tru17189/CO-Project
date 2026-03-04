@@ -1,4 +1,6 @@
+import PopupMessage from '../Components/PopUpMessage'
 import styles from './CSS/PricingTiers.module.css'
+import { useState } from 'react';
 
 interface PlanFeature {
     title: string
@@ -54,7 +56,7 @@ const plans: Plan[] = [
     },
 ]
 
-function PlanCard({ plan }: { plan: Plan }) {
+function PlanCard({ plan, onSelect }: { plan: Plan, onSelect: (name: string) => void}) {
     return (
         <div className={`${styles.card} ${plan.highlighted ? styles.cardHighlighted : ''}`}>
 
@@ -91,6 +93,7 @@ function PlanCard({ plan }: { plan: Plan }) {
                 style={{
                     background: `linear-gradient(135deg, ${plan.badgeColor}, ${plan.accentColor})`,
                 }}
+                onClick={() => onSelect(plan.name)}
             >
                 Elegir {plan.name}
             </button>
@@ -99,6 +102,7 @@ function PlanCard({ plan }: { plan: Plan }) {
 }
 
 export default function PricingTiers() {
+    const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
     return (
         <div className={styles.wrapper}>
             <div className={styles.orb1} />
@@ -113,10 +117,17 @@ export default function PricingTiers() {
 
                 <div className={styles.grid}>
                     {plans.map((plan) => (
-                        <PlanCard key={plan.name} plan={plan} />
+                        <PlanCard key={plan.name} plan={plan} onSelect={setSelectedPlan}/>
                     ))}
                 </div>
             </div>
+            {selectedPlan && (
+                <PopupMessage
+                    title={`Has elegido el plan ${selectedPlan}`}
+                    message={`Has seleccionado el plan ${selectedPlan}. ¡Gracias por elegirnos!`}
+                    onClose={() => setSelectedPlan(null)}
+                />
+            )}
         </div>
     )
 }

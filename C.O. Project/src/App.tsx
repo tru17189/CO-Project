@@ -7,6 +7,7 @@ import NewPassword from './Views/NewPassword'
 import Signup from './Views/Signup'
 import UsersTiers from './Views/UsersTiers'
 import WelcomeNewUser from './Views/WelcomeNewUser'
+import SignupBusiness from './Views/SignupBusiness'
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
+          <Route path='/signup/business' element={<SignupBusiness />} />
           <Route path='/forgot-password' element={<ForgotMyPassword />} />
           <Route path='/new-password' element={<NewPassword />} />
           <Route path='/welcome-new-user' element={<WelcomeNewUser />} />

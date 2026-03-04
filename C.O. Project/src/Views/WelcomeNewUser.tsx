@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from 'react'
 import NewInstruction from '../Components/NewInstruction'
 import styles from './CSS/WelcomeNewUser.module.css'
 import type { RefObject } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export default function WelcomeNewUser() {
     const [numberOfCLicks, setNumberOfClicks] = useState(0)
@@ -17,6 +18,12 @@ export default function WelcomeNewUser() {
     useAutoScroll(instReference, numberOfCLicks)
     function clicksCounter() {
         setNumberOfClicks(prev => prev + 1)
+    }
+
+    // Despues de leer todas instrucciones el usuario puede navegar a los planes
+    const navigate = useNavigate();
+    function moveToPlans() {
+        navigate('/users-tiers')
     }
 
     return (
@@ -86,9 +93,9 @@ export default function WelcomeNewUser() {
             {/* Footer */}
             {numberOfCLicks>=5 && <div 
                 className={styles.footer}
-                style={5>=numberOfCLicks ? {visibility:'visible'} : {visibility:'hidden'}}
+                style={5<=numberOfCLicks ? {visibility:'visible'} : {visibility:'hidden'}}
                 ref={instReference[4]}>
-                <button className={styles.nextButton}>Continuar...</button>
+                <button className={styles.nextButton} onClick={moveToPlans}>Continuar...</button>
             </div>}
         </div>
     )

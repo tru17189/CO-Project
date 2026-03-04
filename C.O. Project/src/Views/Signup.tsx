@@ -57,7 +57,7 @@ export default function Signup() {
         console.log("Confirm Email: ", confirmEmail);
         console.log("Password: ", password);
         console.log("Confirm Password: ", confirmPassword);
-        navigate('/welcome-new-user');
+        navigate('/signup/business');
     }
 
     return (
@@ -93,16 +93,16 @@ export default function Signup() {
                         onChange={(e) => setEmail(e.target.value)}
                     />}
                     {<BasicInput 
-                        label='Número de Telefono'
-                        value={phoneNumber}
-                        type='tel'
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                    />}
-                    {<BasicInput 
                         label='Confirmar Correo Electrónico'
                         value={confirmEmail}
                         type='email'
                         onChange={(e) => setConfirmEmail(e.target.value)}
+                    />}
+                    {<BasicInput 
+                        label='Número de Telefono'
+                        value={phoneNumber}
+                        type='tel'
+                        onChange={(e) => setPhoneNumber(e.target.value)}
                     />}
                     {<BasicInput 
                         label='Contraseña'
