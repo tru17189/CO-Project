@@ -1,0 +1,37 @@
+.popupWrapper {
+    position: fixed; 
+    inset: 0; 
+    background: rgba(0,0,0,0.4);
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    z-index: 1000;
+}
+
+.popupBackground {
+    background: #fff; 
+    border-radius: 8; 
+    padding: 32px 28px;     
+    width: 360; 
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    border: 3px solid var(--border-color);
+}
+.popupBackground h2 {
+    margin: 0 0 10px;
+    font-size: 20;
+}
+.popupBackground p {
+    margin: 0 0 24px;
+    color: #555; 
+    line-height: 1.5;
+}
+.popupBackground button {
+    background: var(--primary-purple); 
+    color: #fff; 
+    border: none;
+    border-radius: 6px; 
+    padding: 10px 20px; 
+    cursor: pointer; 
+    font-size: 14;
+    margin: 1rem;
+}
