@@ -5,15 +5,19 @@ import NextButton from '../Components/NextButton';
 import GoogleButton from '../Components/GoogleButton';
 import Divider from '../Components/Divider';
 import { useNavigate } from 'react-router-dom';
+import { useAuth }      from '../context/AuthContext'
 
 export default function Login() {
     // Variables principales
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate();
+    
+    const { login }   = useAuth()
+    const navigate    = useNavigate()
+    const [error, setError] = useState('')
 
     // ── Functions ──────────────────────────────────────────────
-    const validateInputs = (e: React.FormEvent<HTMLFormElement>) => {
+    const validateInputs = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); 
         if (!e.currentTarget.checkValidity()) {
             alert("Please fill out all required fields");
@@ -22,7 +26,12 @@ export default function Login() {
         console.log("Email:", email);
         console.log("password:", password);
         // Validacion correcta
-        navigate('/dashboard');
+        try {
+            await login(email, password)
+        navigate('/dashboard')
+        } catch (err: any) {
+            setError(err.response?.data?.message || 'Error al iniciar sesión')
+        }
     }
 
     return (
@@ -57,6 +66,8 @@ export default function Login() {
                         text="Iniciar Sesión"
                         type='submit'
                     />}
+                    {/* Show error if login fails */}
+                    {error && <p style={{ color: 'red', fontSize: '13px' }}>{error}</p>}
                 </form>
             </div>
         </div>
