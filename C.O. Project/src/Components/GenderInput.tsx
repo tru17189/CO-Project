@@ -33,8 +33,8 @@ export default function GenderInput({ value, onChange }: GenderInputProps) {
                     <span
                         className='gender-radio'
                         style={{
-                        borderColor: isSelected ? "#7865a3" : "#ccc",
-                        backgroundColor: "#fff",
+                        borderColor: isSelected ?  "#e3d814" : "#ccc",
+                        backgroundColor: isSelected ? "#7865a3" : "#fff",
                         }}
                     >
                         {isSelected && <span className='gender-radioDot'/>}

@@ -19,6 +19,32 @@ interface AuthContextType {
   logout:   () => Promise<void>
 }
 
+// Extend the AuthContextType to include register function
+export interface RegisterData {
+  // Step 1
+  primer_nombre:   string
+  segundo_nombre?: string
+  apellidos:       string
+  genero:          string
+  correo:          string
+  telefono:        string
+  password:        string
+  // Step 2
+  nombre_negocio:    string
+  telefono_negocio:  string
+  correo_negocio:    string
+  num_empleados?:    number
+  plan:              'basico' | 'pro' | 'premium'
+}
+
+interface AuthContextType {
+  user:     User | null
+  loading:  boolean
+  login:    (correo: string, password: string) => Promise<void>
+  logout:   () => Promise<void>
+  register: (data: RegisterData) => Promise<void>   // ← add this
+}
+
 const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -43,8 +69,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null)
   }
 
+  const register = async (data: RegisterData) => {
+    await api.post('/auth/register', data)
+  }
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, register }}>
       {children}
     </AuthContext.Provider>
   )
@@ -56,3 +86,4 @@ export function useAuth() {
   if (!context) throw new Error('useAuth must be used inside AuthProvider')
   return context
 }
+

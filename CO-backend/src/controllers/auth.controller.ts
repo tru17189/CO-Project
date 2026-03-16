@@ -15,50 +15,72 @@ const cookieOptions = {
 
 // ── Register ────────────────────────────────────────────────
 export async function register(req: Request, res: Response) {
-  const { primer_nombre, segundo_nombre, apellidos, telefono, correo, password, es_negocio } = req.body
+  const {
+    // Step 1 — personal info
+    primer_nombre, segundo_nombre, apellidos,
+    correo, telefono, password, genero,
+    // Step 2 — business info
+    nombre_negocio, telefono_negocio,
+    correo_negocio, num_empleados, plan
+  } = req.body
 
-  if (!primer_nombre || !apellidos || !telefono || !correo || !password) {
-    return res.status(400).json({ message: 'Todos los campos obligatorios son requeridos' })
+  // Validate required fields
+  if (!primer_nombre || !apellidos || !correo || !telefono || !password || !genero) {
+    return res.status(400).json({ message: 'Todos los campos personales son requeridos' })
+  }
+  if (!nombre_negocio || !telefono_negocio || !correo_negocio || !plan) {
+    return res.status(400).json({ message: 'Todos los campos del negocio son requeridos' })
   }
 
+  const connection = await pool.getConnection()
+
   try {
-    // Check if email already exists
-    const [rows]: any = await pool.query(
+    // Check if correo already exists
+    const [existing]: any = await connection.query(
       'SELECT id FROM usuarios WHERE correo = ?', [correo]
     )
-    if (rows.length > 0) {
+    if (existing.length > 0) {
       return res.status(409).json({ message: 'El correo ya está registrado' })
     }
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 12)
 
-    // Insert user
-    const [result]: any = await pool.query(
-      `INSERT INTO usuarios 
-        (primer_nombre, segundo_nombre, apellidos, telefono, correo, password, es_negocio)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [primer_nombre, segundo_nombre || null, apellidos, telefono, correo, hashedPassword, es_negocio ? 1 : 0]
+    // Start transaction — both inserts must succeed or both fail
+    await connection.beginTransaction()
+
+    // Insert into usuarios
+    const [userResult]: any = await connection.query(
+      `INSERT INTO usuarios
+        (primer_nombre, segundo_nombre, apellidos, genero, correo, telefono, password, es_negocio)
+       VALUES (?, ?, ?, ?, ?, ?, ?, 1)`,
+      [primer_nombre, segundo_nombre || null, apellidos, genero, correo, telefono, hashedPassword]
     )
 
-    const userId = result.insertId
+    const userId = userResult.insertId
 
-    // Sign JWT
-    const token = jwt.sign(
-        { id: userId, correo } as object,
-        JWT_SECRET,
-        { expiresIn: JWT_EXPIRES } as jwt.SignOptions
+    // Insert into negocios
+    await connection.query(
+      `INSERT INTO negocios
+        (usuario_id, nombre, telefono, correo, num_empleados, plan)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [userId, nombre_negocio, telefono_negocio, correo_negocio, num_empleados || null, plan]
     )
 
-    res.cookie('token', token, cookieOptions)
+    // Commit transaction
+    await connection.commit()
+
     return res.status(201).json({
-      message: 'Usuario creado exitosamente',
-      user: { id: userId, primer_nombre, apellidos, correo, es_negocio }
+      message: 'Cuenta creada exitosamente'
     })
 
   } catch (error) {
+    // Roll back if anything failed
+    await connection.rollback()
     console.error('Register error:', error)
     return res.status(500).json({ message: 'Error interno del servidor' })
+  } finally {
+    connection.release()
   }
 }
 

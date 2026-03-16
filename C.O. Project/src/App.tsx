@@ -24,7 +24,7 @@ function App() {
           <Route path='/new-password' element={<NewPassword />} />
           <Route path='/welcome-new-user' element={<WelcomeNewUser />} />
           <Route path='/chat' element={<Chat />} />
-          <Route path='/users-tiers' element={<UsersTiers />} />
+          <Route path='/signup/users-tiers' element={<UsersTiers />} />
           {/* Protected routes */}
           <Route path='/dashboard' 
             element={

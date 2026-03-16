@@ -30,7 +30,7 @@
     cursor: pointer;
     margin-top: 25px;
     background-color: var(--primary-purple);
-    color: var(--white);
+    color: var(--text-dark);
 }
 .next-button:active {
     background-color: var(--white);

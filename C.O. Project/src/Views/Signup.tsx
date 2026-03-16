@@ -8,6 +8,7 @@ import GenderInput from '../Components/GenderInput';
 import TermsAndConditions from '../Components/TermsAndConditions';
 import NextButton from '../Components/NextButton';
 import { useNavigate } from 'react-router-dom';
+import type { RegisterData } from '../context/AuthContext';
 
 export default function Signup() {
     // Variables para los inputs
@@ -31,33 +32,29 @@ export default function Signup() {
     const validateInputs = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!e.currentTarget.checkValidity()) {
-            setError("Please fill out all required fields");
             alert("Please fill out all required fields");
             return;
         }
         if (email !== confirmEmail) {
-            setError("Emails do not match");
             alert("Emails do not match");
             return;
         }
         if (password !== confirmPassword) {
-            setError("Passwords do not match");
             alert("Passwords do not match");
             return;
         }
 
-        // consoles
-        console.log("First Name: ", firstName); 
-        console.log("Middle Name: ", middleName);
-        console.log("Apellidos: ", apellidos);
-        console.log("Phone number: ", phoneNumber);
-        console.log("Birthday: ", `${birthMonth}/${birthDay}/${birthYear}`)
-        console.log("Gender: ", gender);
-        console.log("Email: ", email);
-        console.log("Confirm Email: ", confirmEmail);
-        console.log("Password: ", password);
-        console.log("Confirm Password: ", confirmPassword);
-        navigate('/signup/business');
+        // Pass step 1 data to step 2 via router state
+        const step1Data: Partial<RegisterData> = {
+            primer_nombre:  firstName,
+            segundo_nombre: middleName || undefined,
+            apellidos,
+            correo: email,
+            telefono: phoneNumber,
+            password,
+            genero: gender,
+        }
+        navigate('/signup/business', { state: { step1Data } })
     }
 
     return (

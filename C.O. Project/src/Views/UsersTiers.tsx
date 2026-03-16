@@ -1,6 +1,8 @@
 import PopupMessage from '../Components/PopUpMessage'
 import styles from './CSS/PricingTiers.module.css'
 import { useState } from 'react';
+import { useAuth, type RegisterData }    from '../context/AuthContext'
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface PlanFeature {
     title: string
@@ -102,7 +104,39 @@ function PlanCard({ plan, onSelect }: { plan: Plan, onSelect: (name: string) => 
 }
 
 export default function PricingTiers() {
+    const [plan, setPlan] = useState<'basico' | 'pro' | 'premium'>('basico')
+    const [loading, setLoading]  = useState(false)
+    const [error, setError] = useState("")
     const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
+
+    const navigate = useNavigate();
+    const location = useLocation(); 
+    const { register } = useAuth();
+
+    const step1Data  = location.state?.step1Data
+    const step2Data  = location.state?.step2Data
+
+    const handleConfirm = async () => {
+        if (!selectedPlan) return
+
+        const fullData: RegisterData = {
+            ...step1Data,
+            ...step2Data,
+            plan: selectedPlan.toLowerCase() as 'basico' | 'pro' | 'premium'
+        }
+
+        setLoading(true)
+        try {
+            await register(fullData)
+            navigate('/login', { state: { message: '¡Cuenta creada! Inicia sesión.' } })
+        } catch (err: any) {
+            setError(err.response?.data?.message || 'Error al crear la cuenta')
+            setSelectedPlan(null) // close popup so error is visible
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return (
         <div className={styles.wrapper}>
             <div className={styles.orb1} />
@@ -115,6 +149,12 @@ export default function PricingTiers() {
                     Potencia tu operación con agentes de IA que trabajan por ti, las 24 horas.
                 </p>
 
+                {error && (
+                    <p style={{ color: '#ff6b6b', textAlign: 'center', marginBottom: '16px' }}>
+                        {error}
+                    </p>
+                )}
+
                 <div className={styles.grid}>
                     {plans.map((plan) => (
                         <PlanCard key={plan.name} plan={plan} onSelect={setSelectedPlan}/>
@@ -126,6 +166,15 @@ export default function PricingTiers() {
                     title={`Has elegido el plan ${selectedPlan}`}
                     message={`Has seleccionado el plan ${selectedPlan}. ¡Gracias por elegirnos!`}
                     onClose={() => setSelectedPlan(null)}
+                    onConfirm={handleConfirm}
+                />
+            )}
+            {loading && (
+                <PopupMessage
+                    title="Creando tu cuenta..."
+                    message="Estamos configurando todo para ti. Esto puede tardar unos momentos."
+                    onClose={() => setSelectedPlan(null)}
+                    onConfirm={() => navigate('/login', { state: { message: '¡Cuenta creada! Inicia sesión.' } })}
                 />
             )}
         </div>

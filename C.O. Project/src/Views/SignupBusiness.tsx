@@ -2,7 +2,7 @@ import './CSS/Signup.css'
 import BasicInput from '../Components/BasicInput';
 import React, { useState } from 'react';
 import NextButton from '../Components/NextButton';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import FlatDivider from '../Components/FlatDivider';
 
 export default function Signup() {
@@ -11,29 +11,35 @@ export default function Signup() {
     const [businessPhone, setBusinessPhone] = useState("")
     const [businessEmail, setBusinessEmail] = useState("")
     const [businessEmployeesNum, setBusinessEmployeesNum] = useState("")
+
     const navigate = useNavigate();
+    const location = useLocation();
+    const step1Data = location.state?.step1Data; 
 
     // ── Functions ──────────────────────────────────────────────
-    const validateInputs = (e: React.FormEvent<HTMLFormElement>) => {
+    const validateInputs = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!e.currentTarget.checkValidity()) {
-            alert("Please fill out all required fields");
+            alert("Por favor, complete todos los campos obligatorios.");
             return;
         }
-        navigate('/welcome-new-user')
 
-        // consoles
-        console.log("Business Name: ", businessName);
-        console.log("Business Phone: ", businessPhone)
-        console.log("Business Email: ", businessEmail)
-        console.log("Business Employees Number: ", businessEmployeesNum)
+        const step2Data = {
+            nombre_negocio:   businessName,
+            telefono_negocio: businessPhone,
+            correo_negocio:   businessEmail,
+            num_empleados:    businessEmployeesNum ? Number(businessEmployeesNum) : undefined,
+        }
+
+        // Pass both steps forward to plan selection
+        navigate('/signup/users-tiers', { state: { step1Data, step2Data } })
     }
 
     return (
         <div className="backdrop">
             <div className="card">
                 <h2>
-                    <center>Bienvenido Usuario.Nombre antes de comenzar, queremos saber más sobre tu negocio...</center>
+                    <center>Bienvenido {step1Data?.primer_nombre} antes de comenzar, queremos saber más sobre tu negocio...</center>
                 </h2>
                 <FlatDivider />
                 {/*Comienzo de las preguntas */}
@@ -59,7 +65,7 @@ export default function Signup() {
                     {<BasicInput 
                         label="Número de Empleados" 
                         value={businessEmployeesNum} 
-                        type="num" 
+                        type="number" 
                         onChange={(e) => setBusinessEmployeesNum(e.target.value)}
                     />}
                     {<NextButton 
