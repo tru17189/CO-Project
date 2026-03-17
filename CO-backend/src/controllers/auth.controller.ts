@@ -164,3 +164,23 @@ export async function me(req: Request, res: Response) {
     return res.status(500).json({ message: 'Error interno del servidor' })
   }
 }
+
+// ── Check if Email exist ────────────────────────────────────
+export async function emailExist(req: Request, res: Response) {
+  const { correo } = req.body
+
+  try {
+    const [rows]: any = await pool.query(
+      'SELECT * FROM usuarios WHERE correo = ?',
+      [correo]
+    )
+    if (rows.length > 0) {
+      return res.status(409).json({ message: 'El correo ya está en uso' })
+    } else {
+      return res.json({ message: 'El correo está disponible' })
+    }
+  } catch (error) {
+    console.error(`Email exist error: ${error}`)
+    return res.status(500).json({ message: 'Error interno del servidor' })
+  }
+}

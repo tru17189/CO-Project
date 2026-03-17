@@ -28,7 +28,7 @@ export default function Login() {
         // Validacion correcta
         try {
             await login(email, password)
-        navigate('/dashboard')
+            navigate('/dashboard')
         } catch (err: any) {
             setError(err.response?.data?.message || 'Error al iniciar sesión')
         }

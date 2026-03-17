@@ -8,7 +8,7 @@ import GenderInput from '../Components/GenderInput';
 import TermsAndConditions from '../Components/TermsAndConditions';
 import NextButton from '../Components/NextButton';
 import { useNavigate } from 'react-router-dom';
-import type { RegisterData } from '../context/AuthContext';
+import { useAuth, type RegisterData } from '../context/AuthContext';
 import PasswordInput from '../Components/PasswordInput';
 
 export default function Signup() {
@@ -28,9 +28,10 @@ export default function Signup() {
     const [error, setError] = useState("");
 
     const navigate = useNavigate();
+    const { checkEmail } = useAuth(); 
 
     // ── Functions ──────────────────────────────────────────────
-    const validateInputs = (e: React.FormEvent<HTMLFormElement>) => {
+    const validateInputs = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!e.currentTarget.checkValidity()) {
             alert("Por favor, complete todos los campos obligatorios.");
@@ -55,7 +56,19 @@ export default function Signup() {
             password,
             genero: gender,
         }
-        navigate('/signup/business', { state: { step1Data } })
+
+        // Revisamos si el correo a sido usado
+        try {
+            await checkEmail(email)
+            navigate('/signup/business', { state: { step1Data } })
+        } catch(err: any) {
+            if (err.response?.status === 409) {
+                setError("Este correo electrónico ya está registrado.")
+            } else {
+                setError(err.response?.data?.message || "Ocurrió un error inesperado.")
+            }
+        }
+        
     }
 
     return (
@@ -127,6 +140,7 @@ export default function Signup() {
                         required
                     />}
                     {<TermsAndConditions />}
+                    {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
                     {<NextButton 
                         text="Crear Cuenta"
                         type='submit'

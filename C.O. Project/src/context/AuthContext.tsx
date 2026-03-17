@@ -12,12 +12,12 @@ interface User {
   es_negocio:    boolean
 }
 
-interface AuthContextType {
+/*interface AuthContextType {
   user:     User | null
   loading:  boolean
   login:    (correo: string, password: string) => Promise<void>
   logout:   () => Promise<void>
-}
+}*/
 
 // Extend the AuthContextType to include register function
 export interface RegisterData {
@@ -42,7 +42,8 @@ interface AuthContextType {
   loading:  boolean
   login:    (correo: string, password: string) => Promise<void>
   logout:   () => Promise<void>
-  register: (data: RegisterData) => Promise<void>   // ← add this
+  register: (data: RegisterData) => Promise<void>
+  checkEmail: (correo: string) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
@@ -73,8 +74,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await api.post('/auth/register', data)
   }
 
+  const checkEmail = async (correo: string) => {
+    await api.post('/auth/check-email', { correo })
+  }
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, register }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, register, checkEmail }}>
       {children}
     </AuthContext.Provider>
   )
