@@ -12,15 +12,15 @@ export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     
-    const { login }   = useAuth()
-    const navigate    = useNavigate()
+    const { login } = useAuth()
+    const navigate = useNavigate()
     const [error, setError] = useState('')
 
     // ── Functions ──────────────────────────────────────────────
     const validateInputs = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); 
         if (!e.currentTarget.checkValidity()) {
-            alert("Please fill out all required fields");
+            alert("Por favor, complete todos los campos obligatorios.");
             return;
         }
         console.log("Email:", email);

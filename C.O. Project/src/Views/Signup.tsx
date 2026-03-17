@@ -32,7 +32,7 @@ export default function Signup() {
     const validateInputs = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!e.currentTarget.checkValidity()) {
-            alert("Please fill out all required fields");
+            alert("Por favor, complete todos los campos obligatorios.");
             return;
         }
         if (email !== confirmEmail) {
@@ -99,7 +99,7 @@ export default function Signup() {
                         label='Número de Telefono'
                         value={phoneNumber}
                         type='tel'
-                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, ''))}
                     />}
                     {<BasicInput 
                         label='Contraseña'
