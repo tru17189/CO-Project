@@ -42,6 +42,8 @@ export default function BirthdayInput({dayValue, onChangeDay, yearValue, onChang
                     onChange={onChangeYear}
                     className='birtday-input'
                     placeholder='Año'
+                    minLength={4}
+                    maxLength={4}
                     required
                 />
             </div>

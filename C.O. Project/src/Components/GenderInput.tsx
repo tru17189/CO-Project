@@ -7,9 +7,10 @@ const options: GenderOption[] = ["Hombre", "Mujer", "No Binario"];
 interface GenderInputProps {
   value?: GenderOption | string | null;
   onChange?: (value: GenderOption) => void;
+  required?: boolean;
 }
 
-export default function GenderInput({ value, onChange }: GenderInputProps) {
+export default function GenderInput({ value, onChange, required = false }: GenderInputProps) {
     const [selected, setSelected] = useState<string | null>(value ?? null);
     const handleSelect = (option: GenderOption) => {
         setSelected(option);
@@ -30,20 +31,37 @@ export default function GenderInput({ value, onChange }: GenderInputProps) {
                         className='gender-optionbtn'
                         aria-pressed={isSelected}
                     >
-                    <span
-                        className='gender-radio'
-                        style={{
-                        borderColor: isSelected ?  "#e3d814" : "#ccc",
-                        backgroundColor: isSelected ? "#7865a3" : "#fff",
-                        }}
-                    >
-                        {isSelected && <span className='gender-radioDot'/>}
-                    </span>
-                    <span className='gender-optionLbael'>{option}</span>
+                        <span
+                            className='gender-radio'
+                            style={{
+                            borderColor: isSelected ?  "#e3d814" : "#ccc",
+                            backgroundColor: isSelected ? "#7865a3" : "#fff",
+                            }}
+                        >
+                            {isSelected && <span className='gender-radioDot'/>}
+                        </span>
+                        <span className='gender-optionLbael'>{option}</span>
                     </button>
                 );
                 })}
             </div>
+            {required && (
+                <input
+                    type="text"
+                    required
+                    value={selected ?? ""}
+                    onChange={() => {}}
+                    tabIndex={-1}
+                    aria-hidden="true"
+                    style={{
+                        opacity: 0,
+                        height: 0,
+                        width: 0,
+                        position: "absolute",
+                        pointerEvents: "none",
+                    }}
+                />
+            )}
         </div>
     )
 }

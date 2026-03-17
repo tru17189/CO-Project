@@ -9,6 +9,7 @@ import TermsAndConditions from '../Components/TermsAndConditions';
 import NextButton from '../Components/NextButton';
 import { useNavigate } from 'react-router-dom';
 import type { RegisterData } from '../context/AuthContext';
+import PasswordInput from '../Components/PasswordInput';
 
 export default function Signup() {
     // Variables para los inputs
@@ -100,17 +101,16 @@ export default function Signup() {
                         value={phoneNumber}
                         type='tel'
                         onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, ''))}
+                        maxLegnth={10}
                     />}
-                    {<BasicInput 
+                    {<PasswordInput 
                         label='Contraseña'
                         value={password}
-                        type='password'
                         onChange={(e) => setPassword(e.target.value)}
                     />}
-                    {<BasicInput 
+                    {<PasswordInput 
                         label='Confirmar Contraseña'
                         value={confirmPassword}
-                        type='password'
                         onChange={(e) => setConfirmPassword(e.target.value)}
                     />}
                     {<BirthdayInput 
@@ -124,6 +124,7 @@ export default function Signup() {
                     {<GenderInput 
                         value={gender}
                         onChange={(value) => setGender(value)}
+                        required
                     />}
                     {<TermsAndConditions />}
                     {<NextButton 

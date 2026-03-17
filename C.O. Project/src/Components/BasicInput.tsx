@@ -4,10 +4,11 @@ interface basicInputProps {
     label: string,
     value: string | number | undefined,
     type: string,
+    maxLegnth?: number,
     onChange: (e: any) => void
 }
 
-export default function BasicInput({label, value, type, onChange}:basicInputProps) {
+export default function BasicInput({label, value, type, maxLegnth, onChange}:basicInputProps) {
     
     return (
         <div className='field-group'>
@@ -17,6 +18,7 @@ export default function BasicInput({label, value, type, onChange}:basicInputProp
                 value={value}
                 onChange={onChange}
                 className='input'
+                maxLength={maxLegnth}
                 required
             />
         </div>
