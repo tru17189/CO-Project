@@ -54,7 +54,8 @@ export default function Signup() {
                         label="Número de Telefono Negocio" 
                         value={businessPhone} 
                         type="tel" 
-                        onChange={(e) => setBusinessPhone(e.target.value)}
+                        maxLegnth={10}
+                        onChange={(e) => setBusinessPhone(e.target.value.replace(/\D/, ''))}
                     />}
                     {<BasicInput 
                         label="Email del Negocio" 
@@ -66,7 +67,7 @@ export default function Signup() {
                         label="Número de Empleados" 
                         value={businessEmployeesNum} 
                         type="number" 
-                        onChange={(e) => setBusinessEmployeesNum(e.target.value)}
+                        onChange={(e) => setBusinessEmployeesNum(e.target.value.replace(/\D/, ''))}
                     />}
                     {<NextButton 
                         text="Crear Cuenta"

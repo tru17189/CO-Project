@@ -10,6 +10,7 @@ import NextButton from '../Components/NextButton';
 import { useNavigate } from 'react-router-dom';
 import { useAuth, type RegisterData } from '../context/AuthContext';
 import PasswordInput from '../Components/PasswordInput';
+import ErrorMessage from '../Components/ErrorMessage';
 
 export default function Signup() {
     // Variables para los inputs
@@ -65,7 +66,7 @@ export default function Signup() {
             if (err.response?.status === 409) {
                 setError("Este correo electrónico ya está registrado.")
             } else {
-                setError(err.response?.data?.message || "Ocurrió un error inesperado.")
+                setError(err.response?.data?.message)
             }
         }
         
@@ -89,6 +90,7 @@ export default function Signup() {
                         label='Segundo Nombre'
                         value={middleName}
                         type='text'
+                        placeholder='Si no tienes segundo nombre coloca "N/A"'
                         onChange={(e) => setMiddleName(e.target.value)}
                     />}
                     {<BasicInput 
@@ -140,7 +142,7 @@ export default function Signup() {
                         required
                     />}
                     {<TermsAndConditions />}
-                    {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+                    {error && <ErrorMessage message={error} />}
                     {<NextButton 
                         text="Crear Cuenta"
                         type='submit'

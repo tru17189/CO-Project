@@ -3,7 +3,7 @@ import styles from "./styles/PopUp.module.css";
 interface PopupProps {
   title: string;
   message: string;
-  onClose: () => void;
+  onClose?: () => void;
   onConfirm?: () => void;
 }
 

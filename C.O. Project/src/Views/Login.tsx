@@ -6,6 +6,7 @@ import GoogleButton from '../Components/GoogleButton';
 import Divider from '../Components/Divider';
 import { useNavigate } from 'react-router-dom';
 import { useAuth }      from '../context/AuthContext'
+import ErrorMessage from '../Components/ErrorMessage';
 
 export default function Login() {
     // Variables principales
@@ -14,7 +15,7 @@ export default function Login() {
     
     const { login } = useAuth()
     const navigate = useNavigate()
-    const [error, setError] = useState('')
+    const [error, setError] = useState("")
 
     // ── Functions ──────────────────────────────────────────────
     const validateInputs = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -30,7 +31,7 @@ export default function Login() {
             await login(email, password)
             navigate('/dashboard')
         } catch (err: any) {
-            setError(err.response?.data?.message || 'Error al iniciar sesión')
+            setError(err.response?.data?.message)
         }
     }
 
@@ -67,7 +68,7 @@ export default function Login() {
                         type='submit'
                     />}
                     {/* Show error if login fails */}
-                    {error && <p style={{ color: 'red', fontSize: '13px' }}>{error}</p>}
+                    {error && <ErrorMessage message={error} />}
                 </form>
             </div>
         </div>

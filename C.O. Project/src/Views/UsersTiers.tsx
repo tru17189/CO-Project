@@ -173,8 +173,6 @@ export default function PricingTiers() {
                 <PopupMessage
                     title="Creando tu cuenta..."
                     message="Estamos configurando todo para ti. Esto puede tardar unos momentos."
-                    onClose={() => setSelectedPlan(null)}
-                    onConfirm={() => navigate('/login', { state: { message: '¡Cuenta creada! Inicia sesión.' } })}
                 />
             )}
         </div>
