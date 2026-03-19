@@ -146,18 +146,61 @@ export async function logout(_req: Request, res: Response) {
 }
 
 // ── Me (get current user) ────────────────────────────────────
+/*
+  Esta funcion tiene el proposito de obtener la informacion del usuario 
+  actualmente autenticado, incluyendo su negocio si es que tiene uno. 
+  Se hace un LEFT JOIN entre las tablas usuarios y negocios para traer toda 
+  la informacion en una sola consulta. Si el usuario no tiene un negocio, 
+  los campos del negocio seran null.
+
+  Ir a frontend/src/contexts/AuthContext.tsx para ver como se consume esta 
+  funcion en el frontend.
+ */
 export async function me(req: Request, res: Response) {
   const userId = (req as any).userId
 
   try {
     const [rows]: any = await pool.query(
-      'SELECT id, primer_nombre, segundo_nombre, apellidos, correo, telefono, es_negocio, created_at FROM usuarios WHERE id = ?',
+      `SELECT 
+      u.id, u.primer_nombre, u.segundo_nombre, u.apellidos,
+      u.correo, u.telefono, u.genero, u.es_negocio, u.created_at,
+      n.id AS negocio_id, n.nombre AS negocio_nombre,
+      n.telefono AS negocio_telefono, n.correo AS negocio_correo,
+      n.num_empleados, n.plan,
+      COUNT(cn.id) AS total_contactos
+      FROM usuarios u
+      LEFT JOIN negocios n ON n.usuario_id = u.id
+      LEFT JOIN contacto_negocios cn ON cn.negocio_id = n.id
+      WHERE u.id = ?
+      GROUP BY u.id, n.id`,
       [userId]
     )
     if (rows.length === 0) {
       return res.status(404).json({ message: 'Usuario no encontrado' })
     }
-    return res.json({ user: rows[0] })
+    const row = rows[0]
+    return res.json({
+      user: {
+        id:             row.id,
+        primer_nombre:  row.primer_nombre,
+        segundo_nombre: row.segundo_nombre,
+        apellidos:      row.apellidos,
+        correo:         row.correo,
+        telefono:       row.telefono,
+        genero:         row.genero,
+        es_negocio:     row.es_negocio,
+        created_at:     row.created_at,
+          negocio: row.negocio_id ? {
+          id:              row.negocio_id,
+          nombre:          row.negocio_nombre,
+          telefono:        row.negocio_telefono,
+          correo:          row.negocio_correo,
+          num_empleados:   row.num_empleados,
+          plan:            row.plan,
+          total_contactos: row.total_contactos,
+        } : null
+      }
+  })
 
   } catch (error) {
     console.error('Me error:', error)
@@ -166,6 +209,9 @@ export async function me(req: Request, res: Response) {
 }
 
 // ── Check if Email exist ────────────────────────────────────
+/*
+ * Esta función verifica si un correo electrónico ya está registrado en la base de datos.
+ */
 export async function emailExist(req: Request, res: Response) {
   const { correo } = req.body
 

@@ -2,14 +2,30 @@ import { createContext, useContext, useState, useEffect } from 'react'
 import type { ReactNode } from 'react';
 import api from '../api/axios'
 
+// ── PROPERTIES ────────────────────────────────────
+/*
+  En esta seccion se encuentran todas propiedades relacionadas con la autenticacion, 
+  como el tipo de usuario, el contexto de autenticacion, etc.
+*/
+
 interface User {
-  id:            number
-  primer_nombre: string
+  id:             number
+  primer_nombre:  string
   segundo_nombre: string | null
-  apellidos:     string
+  apellidos:      string
   correo:         string
-  telefono:      string
-  es_negocio:    boolean
+  telefono:       string
+  genero:         string | null
+  es_negocio:     boolean
+  negocio: {
+    id:            number
+    nombre:        string
+    telefono:      string
+    correo:        string
+    num_empleados: number | null
+    plan:          'basico' | 'pro' | 'premium'
+    total_contactos:number
+  } | null
 }
 
 /*interface AuthContextType {
@@ -46,6 +62,13 @@ interface AuthContextType {
   checkEmail: (correo: string) => Promise<void>
 }
 
+// ── CONTEXT ────────────────────────────────────
+/*
+  En esta seccion se encuentra el contexto de autenticacion, que es el encargado de manejar 
+  toda la logica relacionada con la autenticacion en el frontend, como el login, logout, 
+  registro, etc. Este contexto se puede consumir en cualquier componente del frontend para 
+  obtener la informacion del usuario autenticado o para realizar acciones de autenticacion.
+*/
 const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({ children }: { children: ReactNode }) {

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import styles from './CSS/Dashboard.module.css'
+import { useAuth } from '../context/AuthContext'
 
 // ── Types ──────────────────────────────────────────────────
 interface Contact {
@@ -31,11 +32,11 @@ const platformStyles: Record<string, { bg: string; color: string; icon: string }
     Web:       { bg: '#fef9e7', color: '#b45309', icon: '🌐' },
 }
 
-const stats = [
-    { label: 'Contactos totales', value: '248',  icon: '👥', iconBg: '#ede9f8', iconColor: '#7865a3' },
-    { label: 'Activos hoy',       value: '37',   icon: '⚡', iconBg: '#fef9c3', iconColor: '#a16207' },
-    { label: 'Conversaciones',    value: '1,204', icon: '💬', iconBg: '#e6f9f1', iconColor: '#16a34a' },
-    { label: 'Cierres del mes',   value: '89',   icon: '🏆', iconBg: '#fce7f3', iconColor: '#be185d' },
+// Borrar en el futuro cuando stats este completo con los datos reales
+const defaultStats = [
+    { label: 'Activos hoy',       value: '?',   icon: '⚡', iconBg: '#fef9c3', iconColor: '#a16207' },
+    { label: 'Conversaciones',    value: '?', icon: '💬', iconBg: '#e6f9f1', iconColor: '#16a34a' },
+    { label: 'Cierres del mes',   value: '?',   icon: '🏆', iconBg: '#fce7f3', iconColor: '#be185d' },
 ]
 
 const navItems = [
@@ -46,6 +47,14 @@ const navItems = [
 
 // ── Component ──────────────────────────────────────────────
 export default function Dashboard() {
+    const { user, logout } = useAuth(); // <-- Se invoca al usuario con su informacion...
+    
+    // Stats que se encuentran en la parte superior del dashboard. 
+    const stats = [
+        { label: 'Contactos totales', value: String(user?.negocio?.total_contactos), icon: '👥', iconBg: '#ede9f8', iconColor: '#7865a3' },
+        ...defaultStats,
+    ]
+
     const [collapsed, setCollapsed]     = useState(false)
     const [activeNav, setActiveNav]     = useState('dashboard')
     const [search, setSearch]           = useState('')
@@ -75,7 +84,7 @@ export default function Dashboard() {
             <aside className={`${styles.sidebar} ${collapsed ? styles.sidebarCollapsed : ''}`}>
                 <div className={styles.sidebarBrand}>
                     <div className={styles.brandLogo}>O</div>
-                    <span className={styles.brandName}>ONA</span>
+                    <span className={styles.brandName}>{user?.negocio?.nombre}</span>
                 </div>
 
                 <nav className={styles.sidebarNav}>
@@ -105,7 +114,7 @@ export default function Dashboard() {
                 <header className={styles.topbar}>
                     <div className={styles.topbarLeft}>
                         <h1>Dashboard Principal</h1>
-                        <p>Gestiona tus contactos y agentes de IA</p>
+                        <p>Bienvenido {user?.primer_nombre}, pongamos estos agentes a trabajar 💪</p>
                     </div>
                     <div className={styles.topbarRight}>
                         <div className={styles.searchBox}>
@@ -116,9 +125,9 @@ export default function Dashboard() {
                                 onChange={e => setSearch(e.target.value)}
                             />
                         </div>
-                        <div className={styles.userChip}>
-                            <div className={styles.userChipAvatar}>A</div>
-                            <span className={styles.userChipName}>Admin</span>
+                        <div className={styles.userChip} onClick={logout}>
+                            <div className={styles.userChipAvatar}>{user?.primer_nombre.charAt(0)}</div>
+                            <span className={styles.userChipName}>Cerrar sesión</span>
                         </div>
                     </div>
                 </header>

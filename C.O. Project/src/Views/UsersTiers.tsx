@@ -128,7 +128,7 @@ export default function PricingTiers() {
         setLoading(true)
         try {
             await register(fullData)
-            navigate('/login', { state: { message: '¡Cuenta creada! Inicia sesión.' } })
+            navigate('/welcome-new-user', { state: { message: '¡Cuenta creada! Inicia sesión.' } })
         } catch (err: any) {
             setError(err.response?.data?.message || 'Error al crear la cuenta')
             setSelectedPlan(null) // close popup so error is visible
