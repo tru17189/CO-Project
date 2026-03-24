@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, use } from 'react'
 import type { ReactNode } from 'react';
 import api from '../api/axios'
 
@@ -28,13 +28,6 @@ interface User {
   } | null
 }
 
-/*interface AuthContextType {
-  user:     User | null
-  loading:  boolean
-  login:    (correo: string, password: string) => Promise<void>
-  logout:   () => Promise<void>
-}*/
-
 // Extend the AuthContextType to include register function
 export interface RegisterData {
   // Step 1
@@ -60,6 +53,18 @@ interface AuthContextType {
   logout:   () => Promise<void>
   register: (data: RegisterData) => Promise<void>
   checkEmail: (correo: string) => Promise<void>
+  clients: clientProps[]
+}
+
+// Propiedades de un cliente asignado a un negocio
+interface clientProps {
+  contacto_id: number
+  negocio_id: number
+  primer_nombre: string
+  apellidos: string
+  es_negocio: boolean
+  telefono: string,
+  plataforma: 'WhatsApp' | 'Facebook' | 'Instagram' | 'Web'
 }
 
 // ── CONTEXT ────────────────────────────────────
@@ -74,6 +79,7 @@ const AuthContext = createContext<AuthContextType | null>(null)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user,    setUser]    = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const [clients, setClients] = useState<clientProps[]>([]) // Estado para almacenar los clientes del negocio
 
   // Check if user is already logged in on app load
   useEffect(() => {
@@ -101,8 +107,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await api.post('/auth/check-email', { correo })
   }
 
+  // Obtener los clientes del negocio cuando el usuario es un negocio
+  useEffect(() => {
+    if (user && user.es_negocio) {
+      api.post('/auth/show-business-clients')
+        .then(res => setClients(res.data.contactos_negocio))
+        .catch(err => console.error('Error fetching business clients:', err))
+    }
+  }, [user])
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, register, checkEmail }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, register, checkEmail, clients }}>
       {children}
     </AuthContext.Provider>
   )

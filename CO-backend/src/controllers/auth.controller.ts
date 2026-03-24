@@ -230,3 +230,53 @@ export async function emailExist(req: Request, res: Response) {
     return res.status(500).json({ message: 'Error interno del servidor' })
   }
 }
+
+// ── Users related to a business ─────────────────────────────
+export async function businessClients(req: Request, res: Response) {
+  const userId = (req as any).userId
+
+  try {
+    // Resolve negocio_id from the authenticated user
+    const [negocioRows]: any = await pool.query(
+      'SELECT id FROM negocios WHERE usuario_id = ?',
+      [userId]
+    )
+    if (negocioRows.length === 0) {
+      return res.status(404).json({ message: 'No se encontró un negocio para este usuario' })
+    }
+    const negocioId = negocioRows[0].id
+
+    const [rows]: any = await pool.query(`
+      select cn.contacto_id, 
+      cn.negocio_id, 
+      u.primer_nombre, 
+      u.apellidos,
+      u.es_negocio,
+      u.telefono,
+      c.plataforma 
+      from contacto_negocios cn 
+      inner join contactos c 
+      on cn.contacto_id = c.id
+      inner join usuarios u 
+      on c.usuario_id = u.id 
+      where cn.negocio_id = ?`,
+      [negocioId]
+    )
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Sin clientes ingresados' })
+    }
+    return res.json({
+      contactos_negocio: rows.map((row: any) => ({
+        contacto_id: row.contacto_id,
+        negocio_id: row.negocio_id,
+        primer_nombre: row.primer_nombre,
+        apellidos: row.apellidos,
+        es_negocio: row.es_negocio,
+        telefono: row.telefono,
+        plataforma: row.plataforma
+      }))
+    })
+  } catch (error) {
+    return res.status(500).json({ message: 'Error interno del servidor' })
+  }
+}

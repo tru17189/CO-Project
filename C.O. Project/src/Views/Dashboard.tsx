@@ -4,27 +4,16 @@ import { useAuth } from '../context/AuthContext'
 
 // ── Types ──────────────────────────────────────────────────
 interface Contact {
-    id: number
-    name: string
-    initials: string
-    avatarColor: string
-    phone: string
-    platform: 'WhatsApp' | 'Facebook' | 'Instagram' | 'Web'
-    agent: string
+    contacto_id: number
+    negocio_id: number
+    primer_nombre: string
+    apellidos: string
+    es_negocio: boolean
+    telefono: string
+    plataforma: 'WhatsApp' | 'Facebook' | 'Instagram' | 'Web'
 }
 
 // ── Mock data ──────────────────────────────────────────────
-const contacts: Contact[] = [
-    { id: 1, name: 'María González',   initials: 'MG', avatarColor: '#7865a3', phone: '+52 55 1234 5678', platform: 'WhatsApp',  agent: 'Consultivo' },
-    { id: 2, name: 'Carlos Ramírez',   initials: 'CR', avatarColor: '#c1a3cd', phone: '+52 55 2345 6789', platform: 'Facebook',  agent: 'Relacional' },
-    { id: 3, name: 'Laura Sánchez',    initials: 'LS', avatarColor: '#5a4a82', phone: '+52 55 3456 7890', platform: 'Instagram', agent: 'Outbound'   },
-    { id: 4, name: 'Andrés Herrera',   initials: 'AH', avatarColor: '#9880be', phone: '+52 55 4567 8901', platform: 'WhatsApp',  agent: 'Consultivo' },
-    { id: 5, name: 'Sofía Mendoza',    initials: 'SM', avatarColor: '#c1a3cd', phone: '+52 55 5678 9012', platform: 'Web',       agent: 'Relacional' },
-    { id: 6, name: 'Diego Torres',     initials: 'DT', avatarColor: '#7865a3', phone: '+52 55 6789 0123', platform: 'Facebook',  agent: 'Outbound'   },
-    { id: 7, name: 'Valentina Cruz',   initials: 'VC', avatarColor: '#5a4a82', phone: '+52 55 7890 1234', platform: 'WhatsApp',  agent: 'Consultivo' },
-    { id: 8, name: 'Roberto Jiménez',  initials: 'RJ', avatarColor: '#9880be', phone: '+52 55 8901 2345', platform: 'Instagram', agent: 'Relacional' },
-]
-
 const platformStyles: Record<string, { bg: string; color: string; icon: string }> = {
     WhatsApp:  { bg: '#e6f9f1', color: '#16a34a', icon: '💬' },
     Facebook:  { bg: '#e8f0fe', color: '#1d4ed8', icon: '📘' },
@@ -47,7 +36,7 @@ const navItems = [
 
 // ── Component ──────────────────────────────────────────────
 export default function Dashboard() {
-    const { user, logout } = useAuth(); // <-- Se invoca al usuario con su informacion...
+    const { user, logout, clients } = useAuth() // <-- Se invoca al usuario con su informacion y los clientes del negocio
     
     // Stats que se encuentran en la parte superior del dashboard. 
     const stats = [
@@ -59,13 +48,7 @@ export default function Dashboard() {
     const [activeNav, setActiveNav]     = useState('dashboard')
     const [search, setSearch]           = useState('')
     const [agents, setAgents]           = useState<Record<number, string>>(
-        Object.fromEntries(contacts.map(c => [c.id, c.agent]))
-    )
-
-    const filtered = contacts.filter(c =>
-        c.name.toLowerCase().includes(search.toLowerCase()) ||
-        c.phone.includes(search) ||
-        c.platform.toLowerCase().includes(search.toLowerCase())
+        Object.fromEntries(clients.map(c => [c.contacto_id, 'Relacional'])) // <--- Remplazar despues
     )
 
     const handleAgentChange = (id: number, value: string) => {
@@ -74,8 +57,13 @@ export default function Dashboard() {
 
     const handleDownloadReport = (contact: Contact) => {
         // Placeholder — replace with real PDF generation
-        alert(`Descargando reporte de ${contact.name}...`)
+        alert(`Descargando reporte de ${contact.primer_nombre}...`)
     }
+
+    const isEven = (number:number) => {
+        return number % 2 === 0;
+    }
+
 
     return (
         <div className={styles.app}>
@@ -152,7 +140,7 @@ export default function Dashboard() {
                     <div className={styles.tableHeader}>
                         <div>
                             <p className={styles.tableTitle}>Contactos</p>
-                            <p className={styles.tableSubtitle}>{filtered.length} contactos encontrados</p>
+                            <p className={styles.tableSubtitle}>{clients.length} contactos encontrados</p>
                         </div>
                         <button className={styles.addBtn}>＋ Nuevo contacto</button>
                     </div>
@@ -170,27 +158,27 @@ export default function Dashboard() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filtered.map(contact => {
-                                    const plt = platformStyles[contact.platform]
+                                {clients.map((contact, index) => {
+                                    const plt = platformStyles[contact.plataforma]
                                     return (
-                                        <tr key={contact.id}>
+                                        <tr key={contact.contacto_id}>
 
                                             {/* Contact */}
                                             <td>
                                                 <div className={styles.contactCell}>
                                                     <div
                                                         className={styles.contactAvatar}
-                                                        style={{ background: contact.avatarColor }}
+                                                        style={isEven(index) ? {background: '#7865a3'} : {background: '#c1a3cd'}}
                                                     >
-                                                        {contact.initials}
+                                                        {contact.primer_nombre.charAt(0) + '' + contact.apellidos.charAt(0)}
                                                     </div>
-                                                    <span className={styles.contactName}>{contact.name}</span>
+                                                    <span className={styles.contactName}>{contact.primer_nombre + ' ' + contact.apellidos}</span>
                                                 </div>
                                             </td>
 
                                             {/* Phone */}
                                             <td>
-                                                <span className={styles.phoneText}>{contact.phone}</span>
+                                                <span className={styles.phoneText}>{contact.telefono}</span>
                                             </td>
 
                                             {/* Platform */}
@@ -199,7 +187,7 @@ export default function Dashboard() {
                                                     className={styles.platformBadge}
                                                     style={{ background: plt.bg, color: plt.color }}
                                                 >
-                                                    {plt.icon} {contact.platform}
+                                                    {plt.icon} {contact.plataforma}
                                                 </span>
                                             </td>
 
@@ -207,8 +195,8 @@ export default function Dashboard() {
                                             <td>
                                                 <select
                                                     className={styles.agentSelect}
-                                                    value={agents[contact.id]}
-                                                    onChange={e => handleAgentChange(contact.id, e.target.value)}
+                                                    value={'Relacional' /*agents[contact.contacto_id]*/}
+                                                    onChange={e => handleAgentChange(contact.contacto_id, e.target.value)}
                                                 >
                                                     <option value="Consultivo">Consultivo</option>
                                                     <option value="Relacional">Relacional</option>
@@ -221,7 +209,7 @@ export default function Dashboard() {
                                                 <button
                                                     className={styles.chatBtn}
                                                     title="Ir al chat"
-                                                    onClick={() => alert(`Abriendo chat de ${contact.name}`)}
+                                                    onClick={() => alert(`Abriendo chat de ${contact.primer_nombre + ' ' + contact.apellidos}`)}
                                                 >
                                                     →
                                                 </button>
