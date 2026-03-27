@@ -25,6 +25,8 @@ interface User {
     num_empleados: number | null
     plan:          'basico' | 'pro' | 'premium'
     total_contactos:number
+    total_compradores: number
+    enlaces_enviados: number
   } | null
 }
 
@@ -46,6 +48,18 @@ export interface RegisterData {
   plan:              'basico' | 'pro' | 'premium'
 }
 
+interface RegisterNewContactData {
+  primer_nombre:   string
+  segundo_nombre?: string
+  apellidos:       string
+  genero:          string
+  correo:          string
+  telefono:        string
+  password:        string
+  platforma:       'WhatsApp' | 'Facebook' | 'Instagram' | 'Web'
+  contactedBy:      number
+}
+
 interface AuthContextType {
   user:     User | null
   loading:  boolean
@@ -53,6 +67,7 @@ interface AuthContextType {
   logout:   () => Promise<void>
   register: (data: RegisterData) => Promise<void>
   checkEmail: (correo: string) => Promise<void>
+  registerNewContact: (data: RegisterNewContactData) => Promise<void>
   clients: clientProps[]
 }
 
@@ -103,6 +118,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await api.post('/auth/register', data)
   }
 
+  const registerNewContact = async (data: RegisterNewContactData) => {
+    await api.post('/auth/register/new-contact', data)
+  }
+
   const checkEmail = async (correo: string) => {
     await api.post('/auth/check-email', { correo })
   }
@@ -117,7 +136,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [user])
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, register, checkEmail, clients }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, register, checkEmail, clients, registerNewContact }}>
       {children}
     </AuthContext.Provider>
   )

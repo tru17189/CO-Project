@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import styles from './CSS/Dashboard.module.css'
 import { useAuth } from '../context/AuthContext'
+import api from '../api/axios'
 
 // ── Types ──────────────────────────────────────────────────
 interface Contact {
@@ -23,9 +24,7 @@ const platformStyles: Record<string, { bg: string; color: string; icon: string }
 
 // Borrar en el futuro cuando stats este completo con los datos reales
 const defaultStats = [
-    { label: 'Activos hoy',       value: '?',   icon: '⚡', iconBg: '#fef9c3', iconColor: '#a16207' },
-    { label: 'Conversaciones',    value: '?', icon: '💬', iconBg: '#e6f9f1', iconColor: '#16a34a' },
-    { label: 'Cierres del mes',   value: '?',   icon: '🏆', iconBg: '#fce7f3', iconColor: '#be185d' },
+    { label: 'Número de agentes disponibles',   value: '?',   icon: '⚙️', iconBg: '#aab9c3', iconColor: '#be185d' },
 ]
 
 const navItems = [
@@ -37,10 +36,15 @@ const navItems = [
 // ── Component ──────────────────────────────────────────────
 export default function Dashboard() {
     const { user, logout, clients } = useAuth() // <-- Se invoca al usuario con su informacion y los clientes del negocio
-    
+    const [enlacesEnviados, setEnlacesEnviados] = useState(
+        user?.negocio?.enlaces_enviados ?? 0
+    )
+
     // Stats que se encuentran en la parte superior del dashboard. 
     const stats = [
         { label: 'Contactos totales', value: String(user?.negocio?.total_contactos), icon: '👥', iconBg: '#ede9f8', iconColor: '#7865a3' },
+        { label: 'Ventas cerradas', value: String(user?.negocio?.total_compradores), icon: '💵', iconBg: '#dcfec3', iconColor: '#07a109' },
+        { label: 'Enlaces enviados este mes', value: String(enlacesEnviados), icon: '🔗', iconBg: '#e6f9f1', iconColor: '#16a34a' },
         ...defaultStats,
     ]
 
@@ -64,6 +68,11 @@ export default function Dashboard() {
         return number % 2 === 0;
     }
 
+    const handleGenerateLink = async () => {
+        const link = `${window.location.origin}/signup/new-contact?negocio=${user?.negocio?.id}`
+        navigator.clipboard.writeText(link)
+        alert(`¡Enlace copiado! \n${link}`)
+    }
 
     return (
         <div className={styles.app}>
@@ -142,7 +151,7 @@ export default function Dashboard() {
                             <p className={styles.tableTitle}>Contactos</p>
                             <p className={styles.tableSubtitle}>{clients.length} contactos encontrados</p>
                         </div>
-                        <button className={styles.addBtn}>＋ Nuevo contacto</button>
+                        <button className={styles.addBtn} onClick={handleGenerateLink}>＋ Nuevo contacto</button>
                     </div>
 
                     <div className={styles.tableWrapper}>

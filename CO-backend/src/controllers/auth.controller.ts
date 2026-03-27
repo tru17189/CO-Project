@@ -84,6 +84,71 @@ export async function register(req: Request, res: Response) {
   }
 }
 
+// ── Register a new contact ────────────────────────────────────────────────
+export async function registerNewContact(req: Request, res: Response) {
+  const {
+    primer_nombre, segundo_nombre, apellidos,
+    correo, telefono, password, genero, negocio_id, platforma
+  } = req.body
+
+  if (!primer_nombre || !apellidos || !correo || !telefono || !password || !negocio_id) {
+    return res.status(400).json({ message: 'Todos los campos son requeridos' })
+  }
+
+  const connection = await pool.getConnection()
+
+  try {
+    // Check if correo already exists
+    const [existing]: any = await connection.query(
+      'SELECT id FROM usuarios WHERE correo = ?', [correo]
+    )
+    if (existing.length > 0) {
+      return res.status(409).json({ message: 'El correo ya está registrado' })
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12)
+
+    await connection.beginTransaction()
+
+    // Insert into usuarios (es_negocio = 0)
+    const [userResult]: any = await connection.query(
+      `INSERT INTO usuarios
+        (primer_nombre, segundo_nombre, apellidos, genero, correo, telefono, password, es_negocio)
+       VALUES (?, ?, ?, ?, ?, ?, ?, 0)`,
+      [primer_nombre, segundo_nombre || null, apellidos, genero || null, correo, telefono, hashedPassword]
+    )
+
+    const userId = userResult.insertId
+
+    // Insert into contactos
+    const [contactResult]: any = await connection.query(
+      `INSERT INTO contactos (usuario_id, plataforma, es_comprador)
+       VALUES (?, ?, 0)`,
+      [userId, platforma]
+    )
+
+    const contactId = contactResult.insertId
+
+    // Link contact to the business
+    await connection.query(
+      `INSERT INTO contacto_negocios (contacto_id, negocio_id)
+       VALUES (?, ?)`,
+      [contactId, negocio_id]
+    )
+
+    await connection.commit()
+
+    return res.status(201).json({ message: 'Contacto registrado exitosamente' })
+
+  } catch (error) {
+    await connection.rollback()
+    console.error('registerContact error:', error)
+    return res.status(500).json({ message: 'Error interno del servidor' })
+  } finally {
+    connection.release()
+  }
+}
+
 // ── Login ────────────────────────────────────────────────────
 export async function login(req: Request, res: Response) {
   const { correo, password } = req.body
@@ -167,10 +232,13 @@ export async function me(req: Request, res: Response) {
       n.id AS negocio_id, n.nombre AS negocio_nombre,
       n.telefono AS negocio_telefono, n.correo AS negocio_correo,
       n.num_empleados, n.plan,
-      COUNT(cn.id) AS total_contactos
+      n.enlaces_enviados,
+      COUNT(cn.id) AS total_contactos,
+      SUM(c.es_comprador=1) AS total_compradores
       FROM usuarios u
       LEFT JOIN negocios n ON n.usuario_id = u.id
       LEFT JOIN contacto_negocios cn ON cn.negocio_id = n.id
+      LEFT JOIN contactos c ON c.id = cn.contacto_id
       WHERE u.id = ?
       GROUP BY u.id, n.id`,
       [userId]
@@ -198,6 +266,8 @@ export async function me(req: Request, res: Response) {
           num_empleados:   row.num_empleados,
           plan:            row.plan,
           total_contactos: row.total_contactos,
+          total_compradores: row.total_compradores,
+          enlaces_enviados: row.enlaces_enviados
         } : null
       }
   })
@@ -277,6 +347,48 @@ export async function businessClients(req: Request, res: Response) {
       }))
     })
   } catch (error) {
+    return res.status(500).json({ message: 'Error interno del servidor' })
+  }
+}
+
+// ── Login ────────────────────────────────────────────────────
+export async function getNegocioById(req: Request, res: Response) {
+  const { id } = req.params
+
+  try {
+    const [rows]: any = await pool.query(
+      `SELECT n.id, n.nombre, u.primer_nombre, u.apellidos
+       FROM negocios n
+       JOIN usuarios u ON u.id = n.usuario_id
+       WHERE n.id = ?`,
+      [id]
+    )
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Negocio no encontrado' })
+    }
+    return res.json({ negocio: rows[0] })
+  } catch (error) {
+    console.error('getNegocioById error:', error)
+    return res.status(500).json({ message: 'Error interno del servidor' })
+  }
+}
+
+// ── Number of successful sent links ────────────────────────────────────
+export async function incrementEnlace(req: Request, res: Response) {
+  const { id } = req.params
+
+  try {
+    await pool.query(
+      `UPDATE negocios SET enlaces_enviados = enlaces_enviados + 1 WHERE id = ?`,
+      [id]
+    )
+    const [rows]: any = await pool.query(
+      `SELECT enlaces_enviados FROM negocios WHERE id = ?`,
+      [id]
+    )
+    return res.json({ enlaces_enviados: rows[0].enlaces_enviados })
+  } catch (error) {
+    console.error('incrementEnlace error:', error)
     return res.status(500).json({ message: 'Error interno del servidor' })
   }
 }

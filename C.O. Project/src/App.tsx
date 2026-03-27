@@ -9,6 +9,9 @@ import Signup from './Views/Signup'
 import UsersTiers from './Views/UsersTiers'
 import WelcomeNewUser from './Views/WelcomeNewUser'
 import SignupBusiness from './Views/SignupBusiness'
+// New contacts sign up imports
+import SignupNewContact from './Views/NewContact/SignupNewContact'
+import WelcomeNewContact from './Views/NewContact/WelcomeNewContact'
 
 function App() {
 
@@ -23,8 +26,11 @@ function App() {
           <Route path='/forgot-password' element={<ForgotMyPassword />} />
           <Route path='/new-password' element={<NewPassword />} />
           <Route path='/welcome-new-user' element={<WelcomeNewUser />} />
-          <Route path='/chat' element={<Chat />} />
           <Route path='/signup/users-tiers' element={<UsersTiers />} />
+          <Route path='/chat' element={<Chat />} />
+          {/* Roots for new contacts*/}
+          <Route path='/signup/new-contact' element={<SignupNewContact />} />
+          <Route path='/signup/welcome-new-contact' element={<WelcomeNewContact />} />
           {/* Protected routes */}
           <Route path='/dashboard' 
             element={
