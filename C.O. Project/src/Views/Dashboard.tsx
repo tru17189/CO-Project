@@ -129,118 +129,136 @@ export default function Dashboard() {
                     </div>
                 </header>
 
-                {/* Stats */}
-                <div className={styles.statsRow}>
-                    {stats.map(s => (
-                        <div key={s.label} className={styles.statCard}>
-                            <div className={styles.statIcon} style={{ background: s.iconBg }}>
-                                {s.icon}
-                            </div>
-                            <div className={styles.statInfo}>
-                                <p>{s.label}</p>
-                                <h3>{s.value}</h3>
-                            </div>
+                {activeNav === 'dashboard' && (
+                    <>
+                        {/* Stats */}
+                        <div className={styles.statsRow}>
+                            {stats.map(s => (
+                                <div key={s.label} className={styles.statCard}>
+                                    <div className={styles.statIcon} style={{ background: s.iconBg }}>
+                                        {s.icon}
+                                    </div>
+                                    <div className={styles.statInfo}>
+                                        <p>{s.label}</p>
+                                        <h3>{s.value}</h3>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
 
-                {/* Table */}
-                <section className={styles.tableSection}>
-                    <div className={styles.tableHeader}>
-                        <div>
-                            <p className={styles.tableTitle}>Contactos</p>
-                            <p className={styles.tableSubtitle}>{clients.length} contactos encontrados</p>
-                        </div>
-                        <button className={styles.addBtn} onClick={handleGenerateLink}>＋ Nuevo contacto</button>
-                    </div>
+                        {/* Table */}
+                        <section className={styles.tableSection}>
+                            <div className={styles.tableHeader}>
+                                <div>
+                                    <p className={styles.tableTitle}>Contactos</p>
+                                    <p className={styles.tableSubtitle}>{clients.length} contactos encontrados</p>
+                                </div>
+                                <button className={styles.addBtn} onClick={handleGenerateLink}>＋ Nuevo contacto</button>
+                            </div>
 
-                    <div className={styles.tableWrapper}>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Contacto</th>
-                                    <th>Teléfono</th>
-                                    <th>Plataforma</th>
-                                    <th>Agente</th>
-                                    <th>Ir al chat</th>
-                                    <th>Reporte</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {clients.map((contact, index) => {
-                                    const plt = platformStyles[contact.plataforma]
-                                    return (
-                                        <tr key={contact.contacto_id}>
-
-                                            {/* Contact */}
-                                            <td>
-                                                <div className={styles.contactCell}>
-                                                    <div
-                                                        className={styles.contactAvatar}
-                                                        style={isEven(index) ? {background: '#7865a3'} : {background: '#c1a3cd'}}
-                                                    >
-                                                        {contact.primer_nombre.charAt(0) + '' + contact.apellidos.charAt(0)}
-                                                    </div>
-                                                    <span className={styles.contactName}>{contact.primer_nombre + ' ' + contact.apellidos}</span>
-                                                </div>
-                                            </td>
-
-                                            {/* Phone */}
-                                            <td>
-                                                <span className={styles.phoneText}>{contact.telefono}</span>
-                                            </td>
-
-                                            {/* Platform */}
-                                            <td>
-                                                <span
-                                                    className={styles.platformBadge}
-                                                    style={{ background: plt.bg, color: plt.color }}
-                                                >
-                                                    {plt.icon} {contact.plataforma}
-                                                </span>
-                                            </td>
-
-                                            {/* Agent dropdown */}
-                                            <td>
-                                                <select
-                                                    className={styles.agentSelect}
-                                                    value={'Relacional' /*agents[contact.contacto_id]*/}
-                                                    onChange={e => handleAgentChange(contact.contacto_id, e.target.value)}
-                                                >
-                                                    <option value="Consultivo">Consultivo</option>
-                                                    <option value="Relacional">Relacional</option>
-                                                    <option value="Outbound">Outbound</option>
-                                                </select>
-                                            </td>
-
-                                            {/* Go to chat */}
-                                            <td>
-                                                <button
-                                                    className={styles.chatBtn}
-                                                    title="Ir al chat"
-                                                    onClick={() => alert(`Abriendo chat de ${contact.primer_nombre + ' ' + contact.apellidos}`)}
-                                                >
-                                                    →
-                                                </button>
-                                            </td>
-
-                                            {/* Report */}
-                                            <td>
-                                                <button
-                                                    className={styles.reportBtn}
-                                                    onClick={() => handleDownloadReport(contact)}
-                                                >
-                                                    ↓ PDF
-                                                </button>
-                                            </td>
-
+                            <div className={styles.tableWrapper}>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Contacto</th>
+                                            <th>Teléfono</th>
+                                            <th>Plataforma</th>
+                                            <th>Agente</th>
+                                            <th>Ir al chat</th>
+                                            <th>Reporte</th>
                                         </tr>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
+                                    </thead>
+                                    <tbody>
+                                        {clients.map((contact, index) => {
+                                            const plt = platformStyles[contact.plataforma]
+                                            return (
+                                                <tr key={contact.contacto_id}>
+
+                                                    {/* Contact */}
+                                                    <td>
+                                                        <div className={styles.contactCell}>
+                                                            <div
+                                                                className={styles.contactAvatar}
+                                                                style={isEven(index) ? {background: '#7865a3'} : {background: '#c1a3cd'}}
+                                                            >
+                                                                {contact.primer_nombre.charAt(0) + '' + contact.apellidos.charAt(0)}
+                                                            </div>
+                                                            <span className={styles.contactName}>{contact.primer_nombre + ' ' + contact.apellidos}</span>
+                                                        </div>
+                                                    </td>
+
+                                                    {/* Phone */}
+                                                    <td>
+                                                        <span className={styles.phoneText}>{contact.telefono}</span>
+                                                    </td>
+
+                                                    {/* Platform */}
+                                                    <td>
+                                                        <span
+                                                            className={styles.platformBadge}
+                                                            style={{ background: plt.bg, color: plt.color }}
+                                                        >
+                                                            {plt.icon} {contact.plataforma}
+                                                        </span>
+                                                    </td>
+
+                                                    {/* Agent dropdown */}
+                                                    <td>
+                                                        <select
+                                                            className={styles.agentSelect}
+                                                            value={agents[contact.contacto_id]}
+                                                            onChange={e => handleAgentChange(contact.contacto_id, e.target.value)}
+                                                        >
+                                                            <option value="Consultivo">Consultivo</option>
+                                                            <option value="Relacional">Relacional</option>
+                                                            <option value="Outbound">Outbound</option>
+                                                        </select>
+                                                    </td>
+
+                                                    {/* Go to chat */}
+                                                    <td>
+                                                        <button
+                                                            className={styles.chatBtn}
+                                                            title="Ir al chat"
+                                                            onClick={() => alert(`Abriendo chat de ${contact.primer_nombre + ' ' + contact.apellidos}`)}
+                                                        >
+                                                            →
+                                                        </button>
+                                                    </td>
+
+                                                    {/* Report */}
+                                                    <td>
+                                                        <button
+                                                            className={styles.reportBtn}
+                                                            onClick={() => handleDownloadReport(contact)}
+                                                        >
+                                                            ↓ PDF
+                                                        </button>
+                                                    </td>
+
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </>
+                )}
+
+                {/*Mensajes que se muestran cuando no hay reportes o configuraciones*/}
+                {activeNav === 'reportes' && (
+                    <div className={styles.emptyState}>
+                        <span className={styles.emptyStateIcon}>📊</span>
+                        <p className={styles.emptyStateText}>No hay reportes que mostrar...</p>
                     </div>
-                </section>
+                )}
+                {activeNav === 'config' && (
+                    <div className={styles.emptyState}>
+                        <span className={styles.emptyStateIcon}>⚙</span>
+                        <p className={styles.emptyStateText}>No hay configuraciones que mostrar...</p>
+                    </div>
+                )}
             </div>
         </div>
     )
